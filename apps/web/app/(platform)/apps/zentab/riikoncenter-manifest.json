@@ -1,0 +1,23 @@
+{
+  "id": "zentab",
+  "name": "ZenTab",
+  "description": "Không gian tập trung tối giản giúp quản lý thời gian, danh sách việc cần làm và âm thanh thư giãn.",
+  "category": "app",
+  "type": "builtin",
+  "icon": "Clock",
+  "version": "1.2.0",
+  "author": "RiikonTeam",
+  "entryPath": "/apps/zentab",
+  "bannerBg": "from-teal-500/20 to-emerald-500/20",
+  "tags": [
+    "Focus",
+    "Pomodoro",
+    "Tasks",
+    "Lofi"
+  ],
+  "screenshots": [
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1788832758/5e5bd068-6265-45eb-a9fb-728d7ce1f78d_ou2w4n.webp",
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1788833341/5deea0eb-4b6d-4990-a247-7dcd14ef3dca_zfguut.webp",
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1788834818/b6455c4a-c10e-438c-b169-45cd907ecce0_rq5b29.webp"
+  ]
+}

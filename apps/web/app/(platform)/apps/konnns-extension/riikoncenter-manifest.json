@@ -1,0 +1,13 @@
+{
+  "id": "konnns-extension",
+  "name": "Konnns Extension",
+  "description": "Personal NewTab replacement and More Tool (Browser Extension Embedded)",
+  "category": "utility",
+  "type": "org_app",
+  "icon": "AppWindow",
+  "version": "0.3.2",
+  "author": "konnn04",
+  "entryPath": "/apps/konnns-extension",
+  "bannerBg": "from-teal-500/20 to-emerald-500/20",
+  "tags": ["Extension", "NewTab", "Productivity"]
+}

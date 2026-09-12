@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "ZenTab",
+  "version": "1.0.0",
+  "description": "A minimalist productivity dashboard that transforms your New Tab into a refined, focused workspace featuring a sleek bento grid, Kanban board, GitHub stats, live weather, and a Pomodoro timer.",
+  "permissions": [
+    "storage"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; media-src 'self' blob: data: https:;"
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "ZenTab",
+    "default_icon": {
+      "16": "icon16.png",
+      "32": "icon32.png",
+      "192": "icon192.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "192": "icon192.png"
+  }
+}

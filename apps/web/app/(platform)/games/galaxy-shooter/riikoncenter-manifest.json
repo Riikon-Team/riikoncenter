@@ -1,0 +1,13 @@
+{
+  "id": "galaxy-shooter",
+  "name": "Galaxy Shooter",
+  "description": "Game bắn gà vũ trụ arcade kinh điển với 120 wave chiến dịch, vật phẩm nâng cấp súng và các trận đấu Boss nghẹt thở.",
+  "category": "game",
+  "type": "builtin",
+  "icon": "Gamepad2",
+  "version": "2.0.0",
+  "author": "RiikonGames",
+  "entryPath": "/games/galaxy-shooter",
+  "bannerBg": "from-amber-500/20 to-rose-500/20",
+  "tags": ["Arcade", "Retro", "Action", "Space"]
+}

@@ -1,0 +1,13 @@
+{
+  "id": "study-with-me",
+  "name": "Study With Me",
+  "description": "Phòng học ảo giúp duy trì động lực, theo dõi tiến độ và học tập cùng bạn bè.",
+  "category": "app",
+  "type": "builtin",
+  "icon": "GraduationCap",
+  "version": "1.0.0",
+  "author": "RiikonTeam",
+  "entryPath": "/personal/study",
+  "bannerBg": "from-indigo-500/20 to-purple-500/20",
+  "tags": ["Study", "Productivity", "Community"]
+}

@@ -1,0 +1,305 @@
+{
+  "header": {
+    "store": "Cửa Hàng",
+    "hide_header": "Ẩn Header (Tập trung ZenTab)",
+    "profile_settings": "Cài đặt Hồ sơ",
+    "sign_out": "Đăng xuất"
+  },
+  "profile": {
+    "badge": "Hồ sơ người dùng",
+    "title": "Cài đặt tài khoản",
+    "desc": "Quản lý thông tin cá nhân, tùy chọn bảo mật và lịch sử hoạt động.",
+    "role_user": "Người dùng",
+    "role_admin": "Quản trị viên",
+    "menu_security": "Bảo mật",
+    "menu_activity": "Lịch sử truy cập",
+    "menu_favorites": "Ứng dụng yêu thích",
+    "menu_about": "Về chúng tôi",
+    "menu_preferences": "Tùy chọn",
+    "personal_info": "Thông tin cá nhân",
+    "full_name": "Họ và tên",
+    "display_name": "Tên hiển thị",
+    "email": "Địa chỉ email",
+    "save_changes": "Lưu thay đổi",
+    "auth": "Xác thực",
+    "password": "Mật khẩu",
+    "password_desc": "Đổi mật khẩu bảo mật",
+    "change": "Thay đổi",
+    "2fa": "Xác thực hai yếu tố",
+    "2fa_desc": "Chưa được bật",
+    "enable": "Kích hoạt",
+    "no_recent_apps": "Chưa có ứng dụng nào được truy cập gần đây.",
+    "no_favorite_apps": "Chưa có ứng dụng yêu thích."
+  },
+  "dashboard": {
+    "hero_badge": "Thư Viện Ứng Dụng Trung Tâm",
+    "hero_desc": "Khám phá, quản lý và trải nghiệm các ứng dụng nội bộ cùng các dịch vụ được triển khai từ GitHub Organization Repositories.",
+    "stats_builtin": "Ứng dụng Hệ thống",
+    "stats_third_party": "Phát triển bởi RiikonTeam",
+    "stats_categories": "Danh mục chính",
+    "categories": {
+      "all": "Tất cả",
+      "app": "Ứng dụng",
+      "utility": "Tiện ích",
+      "game": "Game"
+    },
+    "search_placeholder": "Tìm kiếm ứng dụng, thẻ...",
+    "section_builtin_title": "Ứng dụng Hệ thống",
+    "section_builtin_desc": "Công cụ và dịch vụ tích hợp sẵn trong nền tảng RiikonCenter",
+    "section_builtin_count": "{{count}} ứng dụng",
+    "section_builtin_empty": "Không có ứng dụng nào.",
+    "section_org_title": "Được phát triển bởi RiikonTeam",
+    "section_org_empty": "Chưa có ứng dụng nào.",
+    "section_repo_title": "Repository của RiikonTeam",
+    "section_third_party_empty": "Chưa có repository nào.",
+    "apps_count": "Ứng dụng"
+  },
+  "sidebar": {
+    "dashboard": "Cửa hàng RiikonCenter",
+    "apps": "Trung tâm Ứng dụng",
+    "games": "Trung tâm Trò chơi",
+    "profile": "Hồ sơ cá nhân",
+    "favorites": "Mục yêu thích",
+    "no_favorites": "Chưa có ứng dụng yêu thích.",
+    "recent": "Truy cập gần đây",
+    "no_recent": "Chưa có ứng dụng nào."
+  },
+  "app_card": {
+    "version": "v{{version}}",
+    "badge_org": "RiikonTeam",
+    "badge_builtin": "System App",
+    "action_details": "Chi tiết",
+    "action_repo": "Repository",
+    "action_open": "Mở Ứng Dụng"
+  },
+  "app_details": {
+    "not_found_title": "Không tìm thấy ứng dụng!",
+    "not_found_desc": "Ứng dụng có id <1>{{id}}</1> không tồn tại hoặc chưa được định nghĩa trong hệ thống manifest.",
+    "back_to_hub": "Quay lại Thư viện",
+    "back_to_hub_nav": "Quay lại RiikonCenter",
+    "badge_org": "RiikonTeam",
+    "badge_builtin": "System Core Application",
+    "version": "Phiên bản v{{version}}",
+    "action_repo": "Xem Organization Repository",
+    "action_open": "Mở Ứng Dụng Ngay",
+    "section_desc": "Mô tả ứng dụng",
+    "section_tags": "Thẻ từ khóa (Tags)",
+    "section_tech": "Thông tin kỹ thuật & Cấu hình",
+    "tech_id": "Mã định danh (ID):",
+    "tech_entry": "Đường dẫn thực thi (Entry Path):",
+    "tech_type": "Phân loại loại hình:",
+    "type_builtin": "System Core App",
+    "type_third_party": "Dự án của RiikonTeam",
+    "tech_repo": "Repository URL:",
+    "section_manifest": "riikoncenter-manifest.json",
+    "manifest_valid": "Valid Manifest",
+    "manifest_desc": "Nội dung cấu hình JSON được đọc trực tiếp từ manifest của ứng dụng:"
+  },
+  "galaxy_shooter": {
+    "modes": {
+      "endless": "VÔ TẬN",
+      "campaign": "CHIẾN DỊCH"
+    },
+    "choose_difficulty": "CHỌN ĐỘ KHÓ",
+    "play_now": "CHƠI NGAY",
+    "manage_saves": "TẢI GAME / QUẢN LÝ LƯU TRỮ",
+    "mode_campaign_desc": "CHIẾN DỊCH (120 MÀN)",
+    "mode_endless_desc": "VÔ TẬN (ĐIỂM CAO)",
+    "instructions": "HƯỚNG DẪN",
+    "inst_move": "DI CHUYỂN:",
+    "inst_shoot": "BẮN ĐẠN:",
+    "inst_move_shoot": "DI CHUYỂN & BẮN:",
+    "inst_mouse_wasd": "CHUỘT / WASD",
+    "inst_click_space": "CLICK / SPACE",
+    "inst_touch": "CHẠM KÉO & GIỮ MÀN HÌNH",
+    "game_over": "GAME OVER",
+    "score": "ĐIỂM:",
+    "main_menu": "MENU CHÍNH 🔄",
+    "victory": "VICTORY!",
+    "victory_msg": "Chúc mừng bạn đã tiêu diệt Phi Thuyền Mẹ và giải cứu Trái Đất!",
+    "total_score": "ĐIỂM TỔNG:",
+    "return_menu": "TRỞ VỀ MENU 🏆",
+    "paused": "TẠM DỪNG",
+    "continue": "TIẾP TỤC ▶",
+    "save_load": "LƯU GAME / TẢI GAME",
+    "give_up": "BỎ CUỘC 🏳️",
+    "retreat": "RÚT LUI 🛑",
+    "menu": "MENU",
+    "pause_hint": "Nhấn SPACE để tiếp tục nhanh",
+    "confirm_exit": "Xác nhận thoát?",
+    "exit_warning": "Tiến trình chơi hiện tại của bạn sẽ bị mất hoàn toàn nếu chưa Lưu Game!",
+    "go_back": "QUAY LẠI",
+    "exit": "THOÁT",
+    "surrender_campaign": "ĐẦU HÀNG?",
+    "surrender_endless": "KẾT THÚC SỚM?",
+    "surrender_campaign_warning": "Nếu bỏ cuộc, bạn sẽ <1>bị tính là THUA</1>, mất hết tiến trình và <3>xoá luôn File Save hiện tại</3>. Điểm số sẽ được ghi vào Bảng Thành Tích.",
+    "surrender_endless_warning": "Bạn có muốn dừng phần chơi <1>Vô Tận</1> tại đây?<br/><br/>Lượt chơi này sẽ khép lại và Điểm số của bạn sẽ được vinh danh trên Bảng Thành Tích.",
+    "continue_playing": "TIẾP TỤC CHƠI",
+    "accept_defeat": "CHẤP NHẬN THUA",
+    "end_game": "KẾT THÚC GAME",
+    "saves_title": "QUẢN LÝ LƯU TRỮ",
+    "no_saves": "CHƯA CÓ DỮ LIỆU ĐƯỢC LƯU",
+    "lives": "MẠNG:",
+    "load": "TẢI",
+    "delete": "XÓA",
+    "save_current": "+ LƯU GAME HIỆN TẠI",
+    "import_json": "📤 NẠP FILE (.JSON)",
+    "export_json": "📥 XUẤT FILE (.JSON)",
+    "back_to_window": "QUAY LẠI CỬA SỔ",
+    "confirm_delete": "Xác nhận xoá?",
+    "delete_warning": "Bản lưu này sẽ bị xoá vĩnh viễn và không thể khôi phục!",
+    "cancel": "HUỶ BỎ",
+    "delete_now": "XOÁ LUÔN",
+    "difficulties": {
+      "easy": {
+        "name": "DỄ",
+        "desc": "• Hệ số điểm: x1\n• 10,000 điểm = +1 Mạng\n• Trải nghiệm cơ bản, dễ thở."
+      },
+      "normal": {
+        "name": "VỪA",
+        "desc": "• Hệ số điểm: x1.5\n• 25,000 điểm = +1 Mạng\n• Độ khó thông thường"
+      },
+      "hard": {
+        "name": "KHÓ",
+        "desc": "• Hệ số điểm: x2\n• 50,000 điểm = +1 Mạng\n• Tỷ lệ rớt súng giảm mạnh."
+      },
+      "hardcore": {
+        "name": "HARDCORE",
+        "desc": "• Hệ số điểm: x3\n• KHÔNG CỘNG MẠNG (Chỉ 1 mạng duy nhất)\n• Sai một ly, đi một dặm."
+      }
+    }
+  },
+  "apps": {
+    "zentab": {
+      "description": "Không gian tập trung tối giản giúp quản lý thời gian, danh sách việc cần làm và âm thanh thư giãn."
+    },
+    "study-with-me": {
+      "description": "Phòng học ảo giúp duy trì động lực, theo dõi tiến độ và học tập cùng bạn bè."
+    },
+    "galaxy-shooter": {
+      "description": "Game bắn súng vũ trụ arcade kinh điển với 120 wave chiến dịch, vật phẩm nâng cấp súng và các trận đấu Boss nghẹt thở."
+    },
+    "riikon-analytics-dashboard": {
+      "description": "Bảng phân tích số liệu thời gian thực cho các dự án tổ chức, theo dõi lượng truy cập và chỉ số hiệu năng."
+    },
+    "kanban-flow-board": {
+      "description": "Công cụ quản lý công việc và dự án theo phương pháp Kanban linh hoạt tích hợp với GitHub Issues."
+    },
+    "pixel-runner-online": {
+      "description": "Game chay vượt chướng ngại vật Multiplayer được đóng góp từ cộng đồng nhà phát triển tổ chức."
+    },
+    "markdown-converter": {
+      "title": "Trình chuyển đổi Markdown",
+      "subtitle": "Công cụ tổ chức sử dụng thư viện",
+      "input_label": "Đầu vào Markdown",
+      "input_placeholder": "Nhập nội dung markdown của bạn tại đây...",
+      "output_label": "Kết quả HTML",
+      "preview_btn": "Xem trước",
+      "raw_btn": "HTML Gốc",
+      "format_btn": "Định dạng (Shift+Alt+F)",
+      "formatted_msg": "Định dạng HTML thành công!",
+      "download_btn": "Tải xuống",
+      "download_html": "Tải tệp HTML"
+    }
+  },
+  "auth": {
+    "branding": {
+      "title": "Nâng tầm quy trình làm việc của bạn.",
+      "subtitle": "Tham gia hệ sinh thái tập trung được thiết kế để duy trì hiệu suất cao, phục hồi nhận thức và tổ chức công việc liền mạch.",
+      "footer": "© {{year}} RiikonCenter. Bảo lưu mọi quyền."
+    },
+    "login": {
+      "title": "Chào mừng trở lại",
+      "subtitle": "Nhập email của bạn để đăng nhập vào tài khoản",
+      "email": "Email",
+      "email_placeholder": "name@example.com",
+      "password": "Mật khẩu",
+      "password_placeholder": "••••••••",
+      "forgot_password": "Quên mật khẩu?",
+      "submit": "Đăng nhập",
+      "or_continue_with": "Hoặc tiếp tục với",
+      "no_account": "Chưa có tài khoản?",
+      "register_link": "Đăng ký ngay",
+      "success": "Đăng nhập thành công!",
+      "loading": "Đang đăng nhập..."
+    },
+    "register": {
+      "title": "Tạo tài khoản",
+      "subtitle": "Nhập thông tin bên dưới để thiết lập tài khoản của bạn",
+      "full_name": "Họ và tên",
+      "full_name_placeholder": "Nguyễn Văn A",
+      "username": "Tên người dùng",
+      "username_placeholder": "nguyenvana123",
+      "confirm_password": "Xác nhận mật khẩu",
+      "submit": "Tạo tài khoản",
+      "have_account": "Đã có tài khoản?",
+      "login_link": "Đăng nhập ngay",
+      "terms_prefix": "Bằng cách tiếp tục, bạn đồng ý với ",
+      "terms": "Điều khoản Dịch vụ",
+      "and": " và ",
+      "privacy": "Chính sách Bảo mật",
+      "terms_suffix": " của chúng tôi.",
+      "success": "Đăng ký thành công!",
+      "loading": "Đang xử lý..."
+    },
+    "errors": {
+      "invalid_email": "Địa chỉ email không hợp lệ.",
+      "password_too_short": "Mật khẩu phải chứa ít nhất 8 ký tự.",
+      "passwords_dont_match": "Mật khẩu xác nhận không khớp.",
+      "required": "Trường này không được bỏ trống.",
+      "username_too_short": "Tên người dùng phải có ít nhất 3 ký tự.",
+      "username_invalid": "Tên người dùng chỉ được chứa chữ cái, số và dấu gạch dưới.",
+      "email_exists": "Email này đã được đăng ký. Vui lòng đăng nhập hoặc sử dụng email khác.",
+      "invalid_credentials": "Email hoặc mật khẩu không chính xác.",
+      "invalid_refresh_token": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+      "unknown": "Đã xảy ra lỗi không xác định."
+    }
+  },
+  "landing": {
+    "header": {
+      "login": "Đăng nhập",
+      "register": "Đăng ký"
+    },
+    "hero": {
+      "title": "RiikonCenter",
+      "subtitle": "Hệ sinh thái hiệu suất cao, tập trung hóa được thiết kế để tối ưu hóa năng suất và mang lại những trải nghiệm giải trí tương tác sống động.",
+      "cta_main": "Mở Thư viện Ứng dụng",
+      "cta_secondary": "Về chúng tôi"
+    },
+    "apps": {
+      "title": "Trung tâm Ứng dụng",
+      "desc": "Trải nghiệm bộ công cụ làm việc hiệu suất cao, được tích hợp sâu để tối ưu hóa năng suất của bạn.",
+      "item1": "Không gian làm việc ZenTab",
+      "item2": "Bảng Agile Kanban",
+      "item3": "Phân tích Tập trung & Pomodoro",
+      "item4": "Trình soạn thảo & Ghi chú Đám mây"
+    },
+    "tools": {
+      "title": "Công cụ & Thư viện Tích hợp",
+      "desc": "Tích hợp sẵn nhiều công cụ và thư viện mạnh mẽ để mở rộng khả năng của hệ sinh thái.",
+      "item1": "Trình soạn thảo Markdown",
+      "item2": "Biểu đồ & Phân tích",
+      "explore": "Khám phá Công cụ"
+    },
+    "team": {
+      "title": "Đội ngũ phát triển",
+      "desc": "Những thành viên nòng cốt xây dựng nên hệ sinh thái RiikonCenter."
+    },
+    "footer": {
+      "title": "Bắt đầu khám phá RiikonCenter",
+      "desc": "Tham gia ngay nền tảng trung tâm để khởi chạy ứng dụng, tích hợp thư viện và tối ưu hóa hiệu suất làm việc hàng ngày của bạn.",
+      "cta": "Tham gia RiikonCenter",
+      "copyright": "RiikonCenter."
+    }
+  },
+  "apps_hub": {
+    "title": "Trung tâm Ứng dụng",
+    "desc": "Truy cập các tiện ích và ứng dụng bổ sung được thiết kế riêng cho bảng điều khiển của bạn.",
+    "open": "Mở Ứng dụng"
+  },
+  "games_hub": {
+    "title": "Trung tâm Trò chơi",
+    "desc": "Chọn một trò chơi để bắt đầu giải trí trực tiếp ngay trên trình duyệt của bạn.",
+    "play": "Chơi Ngay"
+  }
+}

@@ -1,0 +1,305 @@
+{
+  "header": {
+    "store": "Store",
+    "hide_header": "Hide Header (ZenTab Focus)",
+    "profile_settings": "Profile Settings",
+    "sign_out": "Sign Out"
+  },
+  "profile": {
+    "badge": "User profile",
+    "title": "Account settings",
+    "desc": "Manage your personal information, security preferences, and activity history.",
+    "role_user": "User",
+    "role_admin": "System admin",
+    "menu_security": "Security",
+    "menu_activity": "Recent apps",
+    "menu_favorites": "Favorite apps",
+    "menu_about": "About us",
+    "menu_preferences": "Preferences",
+    "personal_info": "Personal information",
+    "full_name": "Full name",
+    "display_name": "Display name",
+    "email": "Email address",
+    "save_changes": "Save changes",
+    "auth": "Authentication",
+    "password": "Password",
+    "password_desc": "Change secure password",
+    "change": "Change",
+    "2fa": "Two-factor auth",
+    "2fa_desc": "Not enabled",
+    "enable": "Enable",
+    "no_recent_apps": "No recent apps found.",
+    "no_favorite_apps": "No favorite apps yet."
+  },
+  "dashboard": {
+    "hero_badge": "Central App Library",
+    "hero_desc": "Discover, manage, and experience built-in applications and services deployed from GitHub Organization Repositories.",
+    "stats_builtin": "System Apps",
+    "stats_third_party": "Developed by RiikonTeam",
+    "stats_categories": "Main Categories",
+    "categories": {
+      "all": "All",
+      "app": "Apps",
+      "utility": "Utilities",
+      "game": "Games"
+    },
+    "search_placeholder": "Search apps, tags...",
+    "section_builtin_title": "Built-in Core",
+    "section_builtin_desc": "Tools and services natively integrated into RiikonCenter",
+    "section_builtin_count": "{{count}} apps",
+    "section_builtin_empty": "No apps found.",
+    "section_org_title": "Developed by RiikonTeam",
+    "section_org_empty": "No apps found.",
+    "section_repo_title": "RiikonTeam Repositories",
+    "section_third_party_empty": "No repositories found.",
+    "apps_count": "Apps"
+  },
+  "sidebar": {
+    "dashboard": "RiikonCenter Store",
+    "apps": "Apps Hub",
+    "games": "Games Hub",
+    "profile": "User Profile",
+    "favorites": "Favorites",
+    "no_favorites": "No favorites yet.",
+    "recent": "Recent",
+    "no_recent": "No recent apps."
+  },
+  "app_card": {
+    "version": "v{{version}}",
+    "badge_org": "RiikonTeam",
+    "badge_builtin": "System App",
+    "action_details": "Details",
+    "action_repo": "Repository",
+    "action_open": "Launch App"
+  },
+  "app_details": {
+    "not_found_title": "Application not found!",
+    "not_found_desc": "The application with id <1>{{id}}</1> does not exist or is not defined in the manifest system.",
+    "back_to_hub": "Back to Library",
+    "back_to_hub_nav": "Back to RiikonCenter",
+    "badge_org": "RiikonTeam",
+    "badge_builtin": "System Core Application",
+    "version": "Version v{{version}}",
+    "action_repo": "View Organization Repository",
+    "action_open": "Launch App Now",
+    "section_desc": "Application Description",
+    "section_tags": "Tags",
+    "section_tech": "Technical Specs & Config",
+    "tech_id": "Identifier (ID):",
+    "tech_entry": "Execution Path (Entry Path):",
+    "tech_type": "Application Type:",
+    "type_builtin": "System Core App",
+    "type_third_party": "RiikonTeam Project",
+    "tech_repo": "Repository URL:",
+    "section_manifest": "riikoncenter-manifest.json",
+    "manifest_valid": "Valid Manifest",
+    "manifest_desc": "JSON configuration read directly from the application's manifest:"
+  },
+  "galaxy_shooter": {
+    "modes": {
+      "endless": "ENDLESS",
+      "campaign": "CAMPAIGN"
+    },
+    "choose_difficulty": "SELECT DIFFICULTY",
+    "play_now": "PLAY NOW",
+    "manage_saves": "LOAD GAME / MANAGE SAVES",
+    "mode_campaign_desc": "CAMPAIGN (120 WAVES)",
+    "mode_endless_desc": "ENDLESS (HIGH SCORE)",
+    "instructions": "INSTRUCTIONS",
+    "inst_move": "MOVE:",
+    "inst_shoot": "SHOOT:",
+    "inst_move_shoot": "MOVE & SHOOT:",
+    "inst_mouse_wasd": "MOUSE / WASD",
+    "inst_click_space": "CLICK / SPACE",
+    "inst_touch": "TOUCH & DRAG",
+    "game_over": "GAME OVER",
+    "score": "SCORE:",
+    "main_menu": "MAIN MENU 🔄",
+    "victory": "VICTORY!",
+    "victory_msg": "Congratulations, you destroyed the Mothership and saved Earth!",
+    "total_score": "TOTAL SCORE:",
+    "return_menu": "RETURN TO MENU 🏆",
+    "paused": "PAUSED",
+    "continue": "CONTINUE ▶",
+    "save_load": "SAVE / LOAD GAME",
+    "give_up": "GIVE UP 🏳️",
+    "retreat": "RETREAT 🛑",
+    "menu": "MENU",
+    "pause_hint": "Press SPACE to quick continue",
+    "confirm_exit": "Confirm Exit?",
+    "exit_warning": "Your current progress will be completely lost if you haven't Saved!",
+    "go_back": "GO BACK",
+    "exit": "EXIT",
+    "surrender_campaign": "SURRENDER?",
+    "surrender_endless": "END EARLY?",
+    "surrender_campaign_warning": "If you give up, it will <1>count as a DEFEAT</1>, you'll lose all progress and <3>delete the current Save File</3>. Your score will be recorded on the Leaderboard.",
+    "surrender_endless_warning": "Do you want to stop the <1>Endless</1> run here?<br/><br/>This session will conclude and your Score will be immortalized on the Leaderboard.",
+    "continue_playing": "CONTINUE PLAYING",
+    "accept_defeat": "ACCEPT DEFEAT",
+    "end_game": "END GAME",
+    "saves_title": "SAVE MANAGEMENT",
+    "no_saves": "NO SAVED DATA",
+    "lives": "LIVES:",
+    "load": "LOAD",
+    "delete": "DELETE",
+    "save_current": "+ SAVE CURRENT GAME",
+    "import_json": "📤 IMPORT FILE (.JSON)",
+    "export_json": "📥 EXPORT FILE (.JSON)",
+    "back_to_window": "BACK TO WINDOW",
+    "confirm_delete": "Confirm Deletion?",
+    "delete_warning": "This save will be permanently deleted and cannot be recovered!",
+    "cancel": "CANCEL",
+    "delete_now": "DELETE NOW",
+    "difficulties": {
+      "easy": {
+        "name": "EASY",
+        "desc": "• Score Multiplier: x1\n• 10,000 pts = +1 Life\n• A basic, relaxed experience."
+      },
+      "normal": {
+        "name": "NORMAL",
+        "desc": "• Score Multiplier: x1.5\n• 25,000 pts = +1 Life\n• Standard difficulty."
+      },
+      "hard": {
+        "name": "HARD",
+        "desc": "• Score Multiplier: x2\n• 50,000 pts = +1 Life\n• Weapon drop rates drastically reduced."
+      },
+      "hardcore": {
+        "name": "HARDCORE",
+        "desc": "• Score Multiplier: x3\n• NO EXTRA LIVES (Only 1 life)\n• One mistake, game over."
+      }
+    }
+  },
+  "apps": {
+    "zentab": {
+      "description": "A minimalist focus space to manage time, to-do lists, and relaxing ambient sounds."
+    },
+    "study-with-me": {
+      "description": "Virtual study room to maintain motivation, track progress, and study with friends."
+    },
+    "galaxy-shooter": {
+      "description": "Classic arcade space shooter with a 120-wave campaign, weapon upgrades, and intense Boss battles."
+    },
+    "riikon-analytics-dashboard": {
+      "description": "Real-time analytics dashboard for organization projects, tracking traffic and performance metrics."
+    },
+    "kanban-flow-board": {
+      "description": "Agile task and project management tool with seamless GitHub Issues integration."
+    },
+    "pixel-runner-online": {
+      "description": "Multiplayer endless runner game contributed by the organization's developer community."
+    },
+    "markdown-converter": {
+      "title": "Markdown Converter",
+      "subtitle": "Organization Tool powered by",
+      "input_label": "Markdown Input",
+      "input_placeholder": "Type your markdown here...",
+      "output_label": "HTML Output",
+      "preview_btn": "Preview",
+      "raw_btn": "Raw HTML",
+      "format_btn": "Format (Shift+Alt+F)",
+      "formatted_msg": "HTML formatted successfully!",
+      "download_btn": "Download",
+      "download_html": "Download HTML file"
+    }
+  },
+  "auth": {
+    "branding": {
+      "title": "Elevate your workflow with precision.",
+      "subtitle": "Join the centralized ecosystem designed for sustained high performance, cognitive recovery, and seamless organization.",
+      "footer": "© {{year}} RiikonCenter. All rights reserved."
+    },
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Enter your email to sign in to your account",
+      "email": "Email",
+      "email_placeholder": "name@example.com",
+      "password": "Password",
+      "password_placeholder": "••••••••",
+      "forgot_password": "Forgot password?",
+      "submit": "Sign In",
+      "or_continue_with": "Or continue with",
+      "no_account": "Don't have an account?",
+      "register_link": "Sign up",
+      "success": "Successfully logged in!",
+      "loading": "Signing in..."
+    },
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Enter your details below to create your account",
+      "full_name": "Full Name",
+      "full_name_placeholder": "John Doe",
+      "username": "Username",
+      "username_placeholder": "johndoe123",
+      "confirm_password": "Confirm Password",
+      "submit": "Sign Up",
+      "have_account": "Already have an account?",
+      "login_link": "Sign in",
+      "terms_prefix": "By clicking continue, you agree to our ",
+      "terms": "Terms of Service",
+      "and": " and ",
+      "privacy": "Privacy Policy",
+      "terms_suffix": ".",
+      "success": "Account successfully created!",
+      "loading": "Processing..."
+    },
+    "errors": {
+      "invalid_email": "Invalid email address.",
+      "password_too_short": "Password must be at least 8 characters.",
+      "passwords_dont_match": "Passwords do not match.",
+      "required": "This field is required.",
+      "username_too_short": "Username must be at least 3 characters.",
+      "username_invalid": "Username can only contain letters, numbers, and underscores.",
+      "email_exists": "This email is already registered. Please sign in or use a different email.",
+      "invalid_credentials": "Incorrect email or password.",
+      "invalid_refresh_token": "Session expired. Please sign in again.",
+      "unknown": "An unknown error occurred."
+    }
+  },
+  "landing": {
+    "header": {
+      "login": "Login",
+      "register": "Register"
+    },
+    "hero": {
+      "title": "RiikonCenter",
+      "subtitle": "A centralized, high-performance ecosystem designed to streamline productivity and deliver immersive interactive experiences.",
+      "cta_main": "Open App Hub",
+      "cta_secondary": "About Us"
+    },
+    "apps": {
+      "title": "App Center",
+      "desc": "Experience a high-performance suite of tools, deeply integrated to optimize your productivity.",
+      "item1": "ZenTab Workspace",
+      "item2": "Agile Kanban Board",
+      "item3": "Focus & Pomodoro Analytics",
+      "item4": "Cloud Notes & Editor"
+    },
+    "tools": {
+      "title": "Integrated Tools & Libraries",
+      "desc": "Pre-integrated with powerful tools and libraries to extend the ecosystem's capabilities.",
+      "item1": "Markdown Editor",
+      "item2": "Charts & Analytics",
+      "explore": "Explore Tools"
+    },
+    "team": {
+      "title": "Core Team",
+      "desc": "The dedicated members building the RiikonCenter ecosystem."
+    },
+    "footer": {
+      "title": "Ready to explore RiikonCenter?",
+      "desc": "Join the centralized hub to launch applications, integrate libraries, and optimize your daily workflow.",
+      "cta": "Join RiikonCenter",
+      "copyright": "RiikonCenter."
+    }
+  },
+  "apps_hub": {
+    "title": "Apps Hub",
+    "desc": "Access supplementary utility and helper applications built for your dashboard.",
+    "open": "Open Utility"
+  },
+  "games_hub": {
+    "title": "Games Hub",
+    "desc": "Select a game to start playing directly inside your browser.",
+    "play": "Play Game"
+  }
+}

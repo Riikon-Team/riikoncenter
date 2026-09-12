@@ -1,0 +1,16 @@
+[
+  {
+    "id": "member-1",
+    "name": "Konnn04",
+    "role": "Founder / Developer",
+    "github_url": "https://github.com/konnn04",
+    "avatar_url": "https://github.com/konnn04.png"
+  },
+  {
+    "id": "member-2",
+    "name": "Riiichan04",
+    "role": "Co-founder / Developer",
+    "github_url": "https://github.com/riiichan04",
+    "avatar_url": "https://github.com/riiichan04.png"
+  }
+]
