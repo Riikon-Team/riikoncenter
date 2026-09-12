@@ -12,18 +12,30 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
   const pathname = usePathname();
   const { 
     isHeaderVisible, 
-    toggleHeaderVisibility 
+    toggleHeaderVisibility,
+    setHeaderVisible
   } = useSidebarStore();
 
   const isFullScreenApp = 
-    pathname.startsWith("/personal/zentab") || 
+    pathname.startsWith("/apps/zentab") || 
     pathname.startsWith("/games/galaxy-shooter") ||
     pathname.startsWith("/apps/konnns-extension");
+  const isKonnnsExtension = pathname.startsWith("/apps/konnns-extension");
+  const isZenTab = pathname.startsWith("/apps/zentab");
+  const canHideHeader = isZenTab || isKonnnsExtension;
   const [lang, setLang] = useState("en");
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // Reset header visibility when leaving full screen apps
+    if (!canHideHeader && !isHeaderVisible) {
+      setHeaderVisible(true);
+    }
+  }, [pathname, canHideHeader, isHeaderVisible, setHeaderVisible]);
+
+  useEffect(() => {
     setIsMounted(true);
+
     const syncLang = () => {
       try {
         const saved = localStorage.getItem("serene_productivity_settings");
@@ -58,7 +70,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           isFullScreenApp ? "overflow-hidden h-full flex flex-col" : "overflow-y-auto"
         )}>
           {/* Bottom Left Hover Zone to toggle Header */}
-          {isMounted && (
+          {isMounted && canHideHeader && (
             <div className="absolute bottom-4 left-16 group z-[9999] flex justify-center pointer-events-none">
               <button
                 onClick={toggleHeaderVisibility}

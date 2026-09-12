@@ -8,6 +8,7 @@ interface SidebarState {
   isHeaderVisible: boolean;
   toggleSidebarVisibility: () => void;
   toggleHeaderVisibility: () => void;
+  setHeaderVisible: (isVisible: boolean) => void;
 }
 
 export const useSidebarStore = create<SidebarState>((set) => ({
@@ -18,4 +19,5 @@ export const useSidebarStore = create<SidebarState>((set) => ({
   isHeaderVisible: true,
   toggleSidebarVisibility: () => set((state) => ({ isSidebarVisible: !state.isSidebarVisible })),
   toggleHeaderVisibility: () => set((state) => ({ isHeaderVisible: !state.isHeaderVisible })),
+  setHeaderVisible: (isHeaderVisible) => set({ isHeaderVisible }),
 }));

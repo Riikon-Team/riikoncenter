@@ -2,21 +2,22 @@
 
 import React from "react";
 import Link from "next/link";
-import { Gamepad2, ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import * as Icons from "lucide-react";
+import { ThumbnailPlaceholder } from "../../../components/ui/thumbnail-placeholder";
 import { AppManifest } from "../../../lib/apps";
 import { useApps } from "../../../lib/hooks/useApps";
 
 export default function GamesHubPage() {
   const { t } = useTranslation("common");
   const { apps, isLoading } = useApps();
-  const availableGames = apps.filter(app => app.category === 'game');
+  const availableGames = apps.filter(app => app.category === 'game' && app.type !== 'third-party');
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 select-none">
       <div className="flex items-center gap-3 mb-8" id="games-hub-header">
         <div className="p-2 bg-primary/10 rounded-xl border border-primary/20 text-primary">
-          <Gamepad2 className="h-6 w-6" />
+          <Icons.Gamepad2 className="h-6 w-6" />
         </div>
         <div>
           <h1 className="font-heading font-bold text-2xl md:text-3xl text-foreground">
@@ -49,14 +50,13 @@ export default function GamesHubPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
               </div>
             ) : (
-              <div className="h-44 w-full bg-slate-950 flex items-center justify-center border-b relative overflow-hidden">
-                {/* Soft monochrome gradient glow */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-                <div className="absolute w-28 h-28 bg-white/5 rounded-full blur-xl" />
-                
-                <span className="font-mono text-xs tracking-[0.2em] font-semibold text-slate-400 z-20 group-hover:scale-105 transition-transform duration-300 uppercase">
-                  {game.name}
-                </span>
+              <div className="h-44 w-full relative overflow-hidden border-b">
+                <ThumbnailPlaceholder 
+                  icon={(Icons as any)[game.icon] || Icons.Box}
+                  iconUrl={game.iconUrl}
+                  appName={game.name}
+                  bannerBg={game.bannerBg}
+                />
               </div>
             )}
 
@@ -84,7 +84,7 @@ export default function GamesHubPage() {
                   href={game.entryPath}
                   className="w-full flex items-center justify-center gap-2 rounded-xl font-medium text-xs px-4 py-2.5 transition-colors border bg-cyan-500 text-white hover:bg-cyan-600 border-transparent"
                 >
-                  {t("games_hub.play", "Play Game")} <ArrowRight className="h-3 w-3" />
+                  {t("games_hub.play", "Play Game")} <Icons.ArrowRight className="h-3 w-3" />
                 </Link>
               </div>
             </div>

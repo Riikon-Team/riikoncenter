@@ -22,7 +22,9 @@ export function Header() {
   const pathname = usePathname();
   const { t, i18n } = useTranslation("common");
   const { toggleHeaderVisibility, toggle, toggleSidebarVisibility } = useSidebarStore();
-  const isZenTab = pathname.startsWith("/personal/zentab");
+  const isKonnnsExtension = pathname.startsWith("/apps/konnns-extension");
+  const isZenTab = pathname.startsWith("/apps/zentab");
+  const canHideHeader = isZenTab || isKonnnsExtension;
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -99,7 +101,7 @@ export function Header() {
       {/* Right Controls */}
       <div className="flex items-center gap-3 relative">
 
-        {isZenTab && (
+        {canHideHeader && (
           <button
             onClick={toggleHeaderVisibility}
             className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"

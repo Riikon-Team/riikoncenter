@@ -2,7 +2,7 @@
   "id": "konnns-extension",
   "name": "Konnns Extension",
   "description": "Personal NewTab replacement and More Tool (Browser Extension Embedded)",
-  "category": "utility",
+  "category": "app",
   "type": "org_app",
   "icon": "AppWindow",
   "version": "0.3.2",
