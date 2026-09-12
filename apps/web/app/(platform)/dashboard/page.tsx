@@ -102,15 +102,15 @@ export default function RiikonHubDashboardPage() {
         <div className="mt-10 grid grid-cols-2 md:grid-cols-3 gap-1 w-full max-w-xl border-t border-border pt-6">
           <div className="flex flex-col gap-1 border-r border-border pr-4">
             <span className="text-2xl font-bold text-foreground">{builtinApps.length}</span>
-            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">{t("dashboard.stats_builtin", "Built-in Apps")}</span>
+            <span className="text-xs text-muted-foreground uppercase tracking-normal font-semibold">{t("dashboard.stats_builtin", "Built-in Apps")}</span>
           </div>
           <div className="flex flex-col gap-1 md:border-r border-border px-4">
             <span className="text-2xl font-bold text-foreground">{thirdPartyApps.length}</span>
-            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">{t("dashboard.stats_third_party", "Org Repos")}</span>
+            <span className="text-xs text-muted-foreground uppercase tracking-normal font-semibold">{t("dashboard.stats_third_party", "Org Repos")}</span>
           </div>
           <div className="hidden md:flex flex-col gap-1 pl-4">
             <span className="text-2xl font-bold text-foreground">3</span>
-            <span className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">{t("dashboard.stats_categories", "Categories")}</span>
+            <span className="text-xs text-muted-foreground uppercase tracking-normal font-semibold">{t("dashboard.stats_categories", "Categories")}</span>
           </div>
         </div>
       </div>
@@ -125,7 +125,7 @@ export default function RiikonHubDashboardPage() {
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
               className={cn(
-                "px-5 py-2.5 text-xs md:text-sm font-semibold tracking-wider transition-all duration-300 border rounded-2xl capitalize",
+                "px-5 py-2.5 text-xs md:text-sm font-semibold tracking-normal transition-all duration-300 border rounded-2xl",
                 activeCategory === cat.id
                   ? "bg-cyan-500 text-white border-cyan-500 shadow-md"
                   : "bg-transparent border-border text-muted-foreground hover:border-cyan-500/50 hover:text-foreground"
@@ -169,7 +169,7 @@ export default function RiikonHubDashboardPage() {
           </div>
         ) : filteredBuiltin.length === 0 ? (
           <div className="p-12 text-center border border-dashed border-border rounded-xl">
-            <p className="text-muted-foreground text-sm uppercase tracking-wider">{t("dashboard.section_builtin_empty", "No matching built-in apps found.")}</p>
+            <p className="text-muted-foreground text-sm uppercase tracking-normal">{t("dashboard.section_builtin_empty", "No matching built-in apps found.")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -200,7 +200,7 @@ export default function RiikonHubDashboardPage() {
           </div>
         ) : filteredOrg.length === 0 ? (
           <div className="p-12 text-center border border-dashed border-border rounded-xl">
-            <p className="text-muted-foreground text-sm uppercase tracking-wider">{t("dashboard.section_org_empty", "No matching org apps found.")}</p>
+            <p className="text-muted-foreground text-sm uppercase tracking-normal">{t("dashboard.section_org_empty", "No matching org apps found.")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -230,7 +230,7 @@ export default function RiikonHubDashboardPage() {
           </div>
         ) : filteredThirdParty.length === 0 ? (
           <div className="p-12 text-center border border-dashed border-border rounded-xl">
-            <p className="text-muted-foreground text-sm uppercase tracking-wider">{t("dashboard.section_third_party_empty", "No apps deployed yet.")}</p>
+            <p className="text-muted-foreground text-sm uppercase tracking-normal">{t("dashboard.section_third_party_empty", "No apps deployed yet.")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -370,13 +370,13 @@ function AppCard({ app }: { app: AppManifest }) {
             {app.tags.slice(0, 3).map((tag) => (
               <span 
                 key={tag} 
-                className="text-[9px] capitalize tracking-wider font-semibold bg-muted text-muted-foreground px-2 py-0.5 border border-border rounded-md"
+                className="text-[9px] tracking-normal font-semibold bg-muted text-muted-foreground px-2 py-0.5 border border-border rounded-md"
               >
                 {tag}
               </span>
             ))}
             {app.tags.length > 3 && (
-              <span className="text-[9px] capitalize tracking-wider font-semibold text-muted-foreground px-1 py-0.5">
+              <span className="text-[9px] tracking-normal font-semibold text-muted-foreground px-1 py-0.5">
                 +{app.tags.length - 3}
               </span>
             )}
@@ -387,7 +387,7 @@ function AppCard({ app }: { app: AppManifest }) {
         <div className="pt-4 border-t border-border flex items-center justify-between gap-3 mt-auto">
           <Link
           href={`/dashboard/app/${app.id}`}
-          className="inline-flex items-center gap-1.5 text-[11px] font-bold capitalize tracking-wider text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-lg hover:bg-muted"
+          className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-lg hover:bg-muted"
         >
           <Info className="w-3.5 h-3.5" /> {t("app_card.action_details", "Details")}
         </Link>
@@ -397,7 +397,7 @@ function AppCard({ app }: { app: AppManifest }) {
             href={app.repoUrl || "#"}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold capitalize tracking-wider bg-foreground hover:bg-foreground/90 text-background px-4 py-2 transition-all rounded-xl"
+            className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-4 py-2 transition-all rounded-xl"
           >
             {t("app_card.action_repo", "Repo")} <ExternalLink className="w-3.5 h-3.5" />
           </a>
@@ -405,7 +405,7 @@ function AppCard({ app }: { app: AppManifest }) {
           <Link
             href={app.entryPath}
             onClick={() => addRecentApp(app.id)}
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold capitalize tracking-wider bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:pl-6 group-hover:pr-4"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:pl-6 group-hover:pr-4"
           >
             {t("app_card.action_open", "Open")} <ChevronRight className="w-3.5 h-3.5" />
           </Link>

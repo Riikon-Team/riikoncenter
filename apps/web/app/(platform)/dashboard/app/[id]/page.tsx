@@ -121,7 +121,7 @@ export default function AppDetailsPage() {
                 {appName}
               </h1>
               <span className={cn(
-                "text-[11px] font-bold px-2.5 py-1 rounded-full border capitalize tracking-wider",
+                "text-[11px] font-semibold px-2.5 py-1 rounded-full border tracking-normal",
                 isThirdParty 
                   ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/30" 
                   : "bg-teal-500/10 text-teal-400 border-teal-500/30"
