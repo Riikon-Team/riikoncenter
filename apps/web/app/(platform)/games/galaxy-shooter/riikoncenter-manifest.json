@@ -9,5 +9,17 @@
   "author": "RiikonGames",
   "entryPath": "/games/galaxy-shooter",
   "bannerBg": "from-amber-500/20 to-rose-500/20",
-  "tags": ["Arcade", "Retro", "Action", "Space"]
+  "tags": [
+    "Arcade",
+    "Retro",
+    "Action",
+    "Space"
+  ],
+  "screenshots": [
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1789249265/Screenshot_2026-09-10_082933_xe5e0l.webp",
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1789249265/Screenshot_2026-09-10_082709_fkbiiu.webp",
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1789249265/Screenshot_2026-09-10_082606_qihjbc.webp",
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1789249265/Screenshot_2026-09-10_083224_btg6pl.webp",
+    "https://res.cloudinary.com/dv43hpa2s/image/upload/v1789249266/Screenshot_2026-09-10_082650_fpcrw5.webp"
+  ]
 }

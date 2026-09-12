@@ -96,3 +96,13 @@
 * **Implemented Use Cases:** `MarkdownConverterPage.tsx`, `riikoncenter-manifest.json`
 * **Architecture & Clean Code:** Separated UI tools from the core markdown library. Integrated formatting tools (Prettier) directly into the client-side component (RawHtmlViewer) for clear separation of concerns. Injected submodule README into manifest dynamically.
 * **Optimization & UI:** Used dynamic imports for heavy formatting libraries to avoid client-side bloat. Fully responsive grid layouts. Seamless auto-formatting state triggers without performance hits.
+
+### Dashboard UI Refinements - 2026-09-12
+* **Implemented Use Cases:** `dashboard/page.tsx`, `dashboard/app/[id]/page.tsx`, `locales/vi/common.json`
+* **Architecture & Clean Code:** Standardized translations across the stats panel, specifically replacing long text with cleaner strings (e.g. "Repository").
+* **Optimization & UI:** Improved typography readability by replacing `tracking-wider` with `tracking-normal`, removing `capitalize` transforms, and softening action buttons from `font-bold` to `font-semibold`. Tuned the primary CTA button text size down to 14px (`text-sm`) for better proportion inside app cards.
+
+### App Hub & Header Visibility Refinements - 2026-09-13
+* **Implemented Use Cases:** `apps/page.tsx`, `games/page.tsx`, `layout.tsx`, `Header.tsx`
+* **Architecture & Clean Code:** Restructured the layout side-effect logic to properly isolate header visibility state across different pages. Added missing `setHeaderVisible` inside `useSidebarStore`. Correctly separated dynamically loaded GitHub repos (`type: 'third-party'`) from hardcoded organizational projects (`type: 'org_app'`) in the Hub views.
+* **Optimization & UI:** Replaced generic placeholder backgrounds in the App Hub and Game Hub with the unified `ThumbnailPlaceholder` component. Ensured the header toggles smoothly inside focused tools (Zentab and Konnns Extension) without glitching upon route changes.
