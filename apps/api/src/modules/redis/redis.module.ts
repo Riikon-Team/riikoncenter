@@ -7,7 +7,23 @@ import { Redis } from 'ioredis';
     {
       provide: 'REDIS_CLIENT',
       useFactory: () => {
-        return new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
+        const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+        const isUpstash = redisUrl.includes('upstash.io');
+        const isTls = redisUrl.startsWith('rediss://') || isUpstash;
+        
+        // If it's an upstash URL but starts with redis://, it might fail without TLS
+        const client = new Redis(redisUrl, {
+          maxRetriesPerRequest: 3,
+          enableOfflineQueue: false, // Don't hang if disconnected
+          family: 0, // Force IPv4 to fix connection issues
+          ...(isTls ? { tls: { rejectUnauthorized: false } } : {})
+        });
+        
+        client.on('error', (err) => {
+          console.error('Redis connection error:', err.message);
+        });
+        
+        return client;
       },
     },
   ],

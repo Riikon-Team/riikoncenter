@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
-import { parseJwt, JwtPayload, getAvatarColor } from "../../lib/auth";
+import { getAvatarColor } from "../../lib/auth";
+import { useAuthStore } from "../../store/useAuthStore";
 import { 
   Store,
   EyeOff,
@@ -29,15 +30,7 @@ export function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const [user, setUser] = useState<JwtPayload | null>(null);
-
-  useEffect(() => {
-    const token = localStorage.getItem("riikon_access_token");
-    if (token) {
-      const payload = parseJwt(token);
-      if (payload) setUser(payload);
-    }
-  }, []);
+  const { user, logout } = useAuthStore();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -54,9 +47,16 @@ export function Header() {
     localStorage.setItem("riikon_lang", nextLang);
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     setIsProfileOpen(false);
-    localStorage.removeItem("riikon_access_token");
+    try {
+      await fetch("http://localhost:8008/api/v1/auth/logout", {
+        method: "POST",
+      });
+    } catch (err) {
+      console.error("Logout error", err);
+    }
+    logout(); // Clear from Zustand store
     router.push("/login");
   };
 
