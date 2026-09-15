@@ -106,3 +106,8 @@
 * **Implemented Use Cases:** `apps/page.tsx`, `games/page.tsx`, `layout.tsx`, `Header.tsx`
 * **Architecture & Clean Code:** Restructured the layout side-effect logic to properly isolate header visibility state across different pages. Added missing `setHeaderVisible` inside `useSidebarStore`. Correctly separated dynamically loaded GitHub repos (`type: 'third-party'`) from hardcoded organizational projects (`type: 'org_app'`) in the Hub views.
 * **Optimization & UI:** Replaced generic placeholder backgrounds in the App Hub and Game Hub with the unified `ThumbnailPlaceholder` component. Ensured the header toggles smoothly inside focused tools (Zentab and Konnns Extension) without glitching upon route changes.
+
+### Phase 18: Redis Session & Zustand Auth Global State - 2026-09-15
+* **Implemented Use Cases:** `redis.module.ts`, `auth.service.ts`, `auth.controller.ts`, `useAuthStore.ts`, `login/page.tsx`, `register/page.tsx`, `Header.tsx`
+* **Architecture & Clean Code:** Refactored the authentication flow to use HttpOnly cookies for both `accessToken` and `refreshToken`, preventing XSS vulnerabilities. Implemented Refresh Token Rotation by storing sessions inside Redis (`ioredis`) with TTLs. Introduced a robust fallback mechanism using a local Map to prevent the backend from hanging (`enableOfflineQueue: false`) during Upstash network timeouts.
+* **Optimization & UI:** Replaced brittle `localStorage` token parsing with a global `useAuthStore` (Zustand). The Next.js frontend now correctly hydrates the Header profile based on the JSON response from the NestJS API login endpoint. Fixed the logout flow to trigger backend revocation and UI state cleanup seamlessly.

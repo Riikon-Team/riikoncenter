@@ -9,11 +9,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 export default function RegisterPage() {
   const { t } = useTranslation("common");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setUser } = useAuthStore();
 
   const registerSchema = z.object({
     fullName: z.string().min(1, { message: t("auth.errors.required") }),
@@ -52,7 +54,13 @@ export default function RegisterPage() {
         throw new Error(errorData.message || "Registration failed");
       }
       
-      router.push("/login?registered=true");
+      const responseData = await res.json();
+
+      if (responseData.user) {
+        setUser(responseData.user);
+      }
+
+      router.push("/dashboard");
       toast.success(t("auth.register.success"));
     } catch (error: any) {
       console.error(error);

@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["multiSchema"]
+  previewFeatures = []
 }
 
 datasource db {
@@ -9,14 +9,18 @@ datasource db {
 }
 
 model User {
-  id           String       @id @default(uuid())
-  email        String       @unique
+  id           String          @id @default(uuid())
+  email        String          @unique
   passwordHash String
   fullName     String?
   avatarUrl    String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  roleId       String?
+  role         Role?           @relation(fields: [roleId], references: [id])
   preferences  Preference[]
+  favorites    Favorite[]
+  history      AccessHistory[]
 
   @@schema("riikoncenter")
 }
@@ -31,5 +35,37 @@ model Preference {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, moduleName])
+  @@schema("riikoncenter")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  permissions String[]
+  users       User[]
+
+  @@schema("riikoncenter")
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  appId     String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, appId])
+  @@schema("riikoncenter")
+}
+
+model AccessHistory {
+  id         String   @id @default(uuid())
+  userId     String
+  appId      String
+  accessedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@schema("riikoncenter")
 }

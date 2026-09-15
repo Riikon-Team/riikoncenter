@@ -16,17 +16,28 @@ export class PrismaUserRepository implements IUserRepository {
       record.avatarUrl,
       record.createdAt,
       record.updatedAt,
+      record.role ? {
+        id: record.role.id,
+        name: record.role.name,
+        permissions: record.role.permissions,
+      } : null,
     );
   }
 
   async findById(id: string): Promise<User | null> {
-    const record = await this.prisma.user.findUnique({ where: { id } });
+    const record = await this.prisma.user.findUnique({ 
+      where: { id },
+      include: { role: true }
+    });
     if (!record) return null;
     return this.toDomain(record);
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    const record = await this.prisma.user.findUnique({ where: { email } });
+    const record = await this.prisma.user.findUnique({ 
+      where: { email },
+      include: { role: true }
+    });
     if (!record) return null;
     return this.toDomain(record);
   }
@@ -39,6 +50,7 @@ export class PrismaUserRepository implements IUserRepository {
         fullName: user.fullName,
         avatarUrl: user.avatarUrl,
       },
+      include: { role: true }
     });
     return this.toDomain(record);
   }

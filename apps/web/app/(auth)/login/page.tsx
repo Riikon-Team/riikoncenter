@@ -9,11 +9,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 export default function LoginPage() {
   const { t } = useTranslation("common");
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setUser } = useAuthStore();
 
   const loginSchema = z.object({
     email: z.string().email({ message: t("auth.errors.invalid_email") }),
@@ -45,8 +47,8 @@ export default function LoginPage() {
       
       const responseData = await res.json();
       
-      if (responseData.accessToken) {
-        localStorage.setItem("riikon_access_token", responseData.accessToken);
+      if (responseData.user) {
+        setUser(responseData.user);
       }
       
       router.push("/dashboard");
