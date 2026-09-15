@@ -15,8 +15,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  private async generateTokens(userId: string, email: string) {
-    const payload = { sub: userId, email };
+  private async generateTokens(userId: string, email: string, role?: string) {
+    const payload = { sub: userId, email, role: role || 'user' };
     
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, { expiresIn: '15m' }),
@@ -39,7 +39,7 @@ export class AuthService {
       throw new UnauthorizedException('auth.errors.invalid_credentials');
     }
 
-    const tokens = await this.generateTokens(user.id, user.email);
+    const tokens = await this.generateTokens(user.id, user.email, user.role?.name);
     const { passwordHash, ...userWithoutPassword } = user;
     return { user: userWithoutPassword, ...tokens };
   }
@@ -54,7 +54,7 @@ export class AuthService {
       fullName: dto.fullName,
     });
 
-    const tokens = await this.generateTokens(user.id, user.email);
+    const tokens = await this.generateTokens(user.id, user.email, user.role?.name);
     const { passwordHash: _, ...userWithoutPassword } = user;
     return { user: userWithoutPassword, ...tokens };
   }
@@ -63,7 +63,7 @@ export class AuthService {
     try {
       const payload = await this.jwtService.verifyAsync(dto.refreshToken);
       const user = await this.findUserUseCase.executeById(payload.sub);
-      return this.generateTokens(user.id, user.email);
+      return this.generateTokens(user.id, user.email, user.role?.name);
     } catch (e) {
       throw new UnauthorizedException('auth.errors.invalid_refresh_token');
     }

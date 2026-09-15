@@ -7,5 +7,6 @@ export class User {
     public readonly avatarUrl: string | null,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
+    public readonly role?: { id: string; name: string; permissions: string[] } | null,
   ) {}
 }
