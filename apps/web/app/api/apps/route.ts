@@ -34,10 +34,8 @@ export async function GET() {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    // Fetch repositories from the organization
-    // Using type=all to fetch both public and private repos if the token allows it
-    const reposRes = await fetch(`https://api.github.com/orgs/${orgName}/repos?type=all&per_page=100`, {
-      headers,
+    // Fetch repositories from our Backend using GitHub App auth
+    const reposRes = await fetch(`http://localhost:8008/api/v1/github/org-repos/${orgName}`, {
       next: { revalidate: 3600 }, // Cache for 1 hour
     });
 
@@ -56,40 +54,38 @@ export async function GET() {
       if (repo.name.toLowerCase() === 'riikoncenter') return null;
 
       try {
-        // Attempt to fetch riikoncenter-manifest.json from the default branch
-        const manifestUrl = `https://raw.githubusercontent.com/${orgName}/${repo.name}/${repo.default_branch}/riikoncenter-manifest.json`;
-        
+        // Fetch manifest via backend
+        const manifestUrl = `http://localhost:8008/api/v1/github/org-repos/${orgName}/${repo.name}/file/riikoncenter-manifest.json`;
         const manifestRes = await fetch(manifestUrl, {
-          headers: token ? { 'Authorization': `token ${token}` } : undefined,
           next: { revalidate: 3600 },
         });
 
         if (manifestRes.ok) {
-          const manifestData = await manifestRes.json();
-          
-          let readme = undefined;
-          try {
-            const readmeRes = await fetch(`https://api.github.com/repos/${orgName}/${repo.name}/readme`, {
-              headers: token ? { 
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/vnd.github.v3.raw'
-              } : { 'Accept': 'application/vnd.github.v3.raw' },
-              next: { revalidate: 3600 },
-            });
-            if (readmeRes.ok) {
-              readme = await readmeRes.text();
+          const { data: rawManifest } = await manifestRes.json();
+          if (rawManifest) {
+            const manifestData = typeof rawManifest === 'string' ? JSON.parse(rawManifest) : rawManifest;
+            
+            let readme = undefined;
+            try {
+              const readmeRes = await fetch(`http://localhost:8008/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
+                next: { revalidate: 3600 },
+              });
+              if (readmeRes.ok) {
+                const { data } = await readmeRes.json();
+                if (data) readme = data;
+              }
+            } catch (e) {
+              console.warn(`Failed to fetch readme for ${repo.name}`);
             }
-          } catch (e) {
-            console.warn(`Failed to fetch readme for ${repo.name}`);
-          }
 
-          // Ensure it's marked as third-party and has a fallback repoUrl
-          return {
-            ...manifestData,
-            type: 'third-party',
-            repoUrl: manifestData.repoUrl || repo.html_url,
-            readme: manifestData.readme || readme,
-          } as AppManifest;
+            // Ensure it's marked as third-party and has a fallback repoUrl
+            return {
+              ...manifestData,
+              type: 'third-party',
+              repoUrl: manifestData.repoUrl || repo.html_url,
+              readme: manifestData.readme || readme,
+            } as AppManifest;
+          }
         }
       } catch (err) {
         console.warn(`Failed to fetch/parse manifest for ${repo.name}`, err);
@@ -97,15 +93,12 @@ export async function GET() {
 
       let readme = undefined;
       try {
-        const readmeRes = await fetch(`https://api.github.com/repos/${orgName}/${repo.name}/readme`, {
-          headers: token ? { 
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/vnd.github.v3.raw'
-          } : { 'Accept': 'application/vnd.github.v3.raw' },
+        const readmeRes = await fetch(`http://localhost:8008/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
           next: { revalidate: 3600 },
         });
         if (readmeRes.ok) {
-          readme = await readmeRes.text();
+          const { data } = await readmeRes.json();
+          if (data) readme = data;
         }
       } catch (e) {
         console.warn(`Failed to fetch readme for fallback ${repo.name}`);
