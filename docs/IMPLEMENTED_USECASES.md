@@ -109,5 +109,9 @@
 
 ### Phase 18: Redis Session & Zustand Auth Global State - 2026-09-15
 * **Implemented Use Cases:** `redis.module.ts`, `auth.service.ts`, `auth.controller.ts`, `useAuthStore.ts`, `login/page.tsx`, `register/page.tsx`, `Header.tsx`
-* **Architecture & Clean Code:** Refactored the authentication flow to use HttpOnly cookies for both `accessToken` and `refreshToken`, preventing XSS vulnerabilities. Implemented Refresh Token Rotation by storing sessions inside Redis (`ioredis`) with TTLs. Introduced a robust fallback mechanism using a local Map to prevent the backend from hanging (`enableOfflineQueue: false`) during Upstash network timeouts.
 * **Optimization & UI:** Replaced brittle `localStorage` token parsing with a global `useAuthStore` (Zustand). The Next.js frontend now correctly hydrates the Header profile based on the JSON response from the NestJS API login endpoint. Fixed the logout flow to trigger backend revocation and UI state cleanup seamlessly.
+
+### Phase 19: GitHub App Integration & Markdown Rendering - 2026-09-16
+* **Implemented Use Cases:** `github.service.ts`, `api/apps/route.ts`, `dashboard/app/[id]/page.tsx`, `riikoncenter-manifest.json`
+* **Architecture & Clean Code:** Refactored GitHub integration to replace legacy PAT (Personal Access Token) with a scalable GitHub App strategy. The backend now authenticates as an App Installation via `@octokit/auth-app`, enabling up to 15k requests/hour for Organization repos. Updated the frontend Hub API (`api/apps/route.ts`) to route through the backend proxy instead of direct GitHub API calls.
+* **Optimization & UI:** Improved Dashboard Markdown rendering by integrating `rehype-raw`, allowing rich HTML elements (like shields/badges in the README) to render perfectly without compromising layout stability or security. Cleaned up the platform by entirely removing the deprecated `github-tracker` standalone frontend component.
