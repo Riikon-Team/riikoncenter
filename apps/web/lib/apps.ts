@@ -24,7 +24,6 @@ import galaxyShooterManifest from '../app/(platform)/games/galaxy-shooter/riikon
 import konnnsExtensionManifest from '../app/(platform)/apps/konnns-extension/riikoncenter-manifest.json';
 import markdownConverterManifest from '../app/(platform)/apps/markdown-converter/riikoncenter-manifest.json';
 
-// Built-in App Manifests
 export const FALLBACK_BUILTIN_APPS: AppManifest[] = [
   zenTabManifest as AppManifest,
   galaxyShooterManifest as AppManifest,

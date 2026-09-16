@@ -3,6 +3,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './modules/users/infrastructure/users.module';
 import { AuthModule } from './modules/auth/infrastructure/auth.module';
 import { RedisModule } from './modules/redis/redis.module';
+import { GithubModule } from './modules/github/github.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 
@@ -12,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core';
     RedisModule,
     UsersModule, 
     AuthModule,
+    GithubModule,
     ThrottlerModule.forRoot([{
       ttl: 60000,
       limit: 10,
