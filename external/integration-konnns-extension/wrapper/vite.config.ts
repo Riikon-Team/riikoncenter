@@ -10,6 +10,18 @@ export default defineConfig({
     fs: {
       allow: ['..'],
     },
+    proxy: {
+      '/wallhaven-api': {
+        target: 'https://wallhaven.cc/api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/wallhaven-api/, '')
+      },
+      '/wallhaven-img': {
+        target: 'https://w.wallhaven.cc',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/wallhaven-img/, '')
+      }
+    }
   },
   resolve: {
     alias: {
