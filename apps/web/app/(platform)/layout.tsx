@@ -1,15 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { Header } from "../../components/layout/Header";
 import { Sidebar } from "../../components/layout/Sidebar";
 import { useSidebarStore } from "../../store/useSidebarStore";
 import { cn } from "@riikoncenter/ui";
-import { Eye } from "lucide-react";
+import { Eye, Wrench, ArrowLeft } from "lucide-react";
+
+function ToolBackButton() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathParam = searchParams.get('path');
+  const isInsideTool = !!pathParam;
+
+  if (!isInsideTool) return null;
+
+  return (
+    <button
+      onClick={() => router.push('/apps/konnns-extension')}
+      className="transition-opacity duration-300 p-2.5 rounded-full shadow-xl border flex items-center justify-center cursor-pointer pointer-events-auto bg-background text-muted-foreground border-border hover:bg-muted opacity-0 group-hover:opacity-100"
+      title="Back to Tools Menu"
+    >
+      <ArrowLeft className="w-4 h-4" />
+    </button>
+  );
+}
 
 export default function PlatformLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { 
     isHeaderVisible, 
     toggleHeaderVisibility,
@@ -25,6 +45,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
   const canHideHeader = isZenTab || isKonnnsExtension;
   const [lang, setLang] = useState("en");
   const [isMounted, setIsMounted] = useState(false);
+  const [isToolsMenuOpen, setIsToolsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Reset header visibility when leaving full screen apps
@@ -32,6 +53,18 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
       setHeaderVisible(true);
     }
   }, [pathname, canHideHeader, isHeaderVisible, setHeaderVisible]);
+
+  useEffect(() => {
+    // Lắng nghe lệnh điều hướng (NAVIGATE) từ popup iframe gửi lên
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'NAVIGATE' && event.data?.path) {
+        setIsToolsMenuOpen(false); // Đóng menu
+        router.push(event.data.path); // Soft Navigation của Next.js (không reload cả trang)
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [router]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -69,9 +102,17 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           "flex-1 relative w-full",
           isFullScreenApp ? "overflow-hidden h-full flex flex-col" : "overflow-y-auto"
         )}>
-          {/* Bottom Left Hover Zone to toggle Header */}
+          {/* Bottom Left Hover Zone to toggle Header & Tools */}
           {isMounted && canHideHeader && (
-            <div className="absolute bottom-4 left-16 group z-[9999] flex justify-center pointer-events-none">
+            <div className="absolute bottom-4 left-16 group z-[9999] flex gap-2 items-center pointer-events-none">
+              
+              {/* Back Button (Only visible inside a Konnns tool) */}
+              {isKonnnsExtension && (
+                <Suspense fallback={null}>
+                  <ToolBackButton />
+                </Suspense>
+              )}
+
               <button
                 onClick={toggleHeaderVisibility}
                 className={cn(
@@ -84,6 +125,29 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
               >
                 <Eye className="w-4 h-4" />
               </button>
+
+              <button
+                onClick={() => setIsToolsMenuOpen(!isToolsMenuOpen)}
+                className={cn(
+                  "transition-opacity duration-300 p-2.5 rounded-full shadow-xl border flex items-center justify-center cursor-pointer pointer-events-auto",
+                  isToolsMenuOpen ? "opacity-100 bg-cyan-500 text-white border-cyan-400 hover:bg-cyan-600" : "opacity-0 group-hover:opacity-100 bg-background text-muted-foreground border-border hover:bg-muted"
+                )}
+                title="Tools & Apps"
+              >
+                <Wrench className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
+          {/* Floating Konnns Tools Menu */}
+          {isMounted && isToolsMenuOpen && (
+            <div className="absolute bottom-16 left-16 z-[9999] w-[450px] h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-none">
+               <iframe 
+                  src="http://localhost:3304/?page=popup" 
+                  width="100%" 
+                  height="100%" 
+                  className="border-none bg-transparent pointer-events-auto"
+               />
             </div>
           )}
           
