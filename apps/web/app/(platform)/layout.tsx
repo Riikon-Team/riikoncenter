@@ -1,15 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { Header } from "../../components/layout/Header";
 import { Sidebar } from "../../components/layout/Sidebar";
 import { useSidebarStore } from "../../store/useSidebarStore";
 import { cn } from "@riikoncenter/ui";
-import { Eye, Wrench } from "lucide-react";
+import { Eye, Wrench, ArrowLeft } from "lucide-react";
+
+function ToolBackButton() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathParam = searchParams.get('path');
+  const isInsideTool = !!pathParam;
+
+  if (!isInsideTool) return null;
+
+  return (
+    <button
+      onClick={() => router.push('/apps/konnns-extension')}
+      className="transition-opacity duration-300 p-2.5 rounded-full shadow-xl border flex items-center justify-center cursor-pointer pointer-events-auto bg-background text-muted-foreground border-border hover:bg-muted opacity-0 group-hover:opacity-100"
+      title="Back to Tools Menu"
+    >
+      <ArrowLeft className="w-4 h-4" />
+    </button>
+  );
+}
 
 export default function PlatformLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { 
     isHeaderVisible, 
     toggleHeaderVisibility,
@@ -39,12 +59,12 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === 'NAVIGATE' && event.data?.path) {
         setIsToolsMenuOpen(false); // Đóng menu
-        window.location.href = event.data.path; // Điều hướng
+        router.push(event.data.path); // Soft Navigation của Next.js (không reload cả trang)
       }
     };
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -85,6 +105,14 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           {/* Bottom Left Hover Zone to toggle Header & Tools */}
           {isMounted && canHideHeader && (
             <div className="absolute bottom-4 left-16 group z-[9999] flex gap-2 items-center pointer-events-none">
+              
+              {/* Back Button (Only visible inside a Konnns tool) */}
+              {isKonnnsExtension && (
+                <Suspense fallback={null}>
+                  <ToolBackButton />
+                </Suspense>
+              )}
+
               <button
                 onClick={toggleHeaderVisibility}
                 className={cn(

@@ -7,8 +7,8 @@ function KonnnsFrame() {
   const searchParams = useSearchParams()
   const path = searchParams.get('path')
 
-  // Nếu có truyền path (ví dụ: #/whiteboard), mở trang các công cụ
-  // Nếu không có, mở trang gốc mặc định (ZenTab)
+  // Nếu có truyền path (ví dụ: #/whiteboard), mở trang các công cụ (page=site)
+  // Nếu không có, mở trang gốc mặc định (newtab)
   const src = path ? `http://localhost:3304/?page=site${path}` : "http://localhost:3304"
 
   return (
