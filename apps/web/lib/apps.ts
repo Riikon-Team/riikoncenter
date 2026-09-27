@@ -22,13 +22,15 @@ export type AppManifest = {
 import zenTabManifest from '../app/(platform)/apps/zentab/riikoncenter-manifest.json';
 import galaxyShooterManifest from '../app/(platform)/games/galaxy-shooter/riikoncenter-manifest.json';
 import konnnsExtensionManifest from '../app/(platform)/apps/konnns-extension/riikoncenter-manifest.json';
+import konnnsExtensionToolsManifest from '../app/(platform)/apps/konnns-extension-tools/riikoncenter-manifest.json';
 import markdownConverterManifest from '../app/(platform)/apps/markdown-converter/riikoncenter-manifest.json';
 
 export const FALLBACK_BUILTIN_APPS: AppManifest[] = [
   zenTabManifest as AppManifest,
   galaxyShooterManifest as AppManifest,
   konnnsExtensionManifest as AppManifest,
-  markdownConverterManifest as AppManifest
+  markdownConverterManifest as AppManifest,
+  konnnsExtensionToolsManifest as AppManifest
 ];
 
 export function getBuiltinApps(): AppManifest[] {
