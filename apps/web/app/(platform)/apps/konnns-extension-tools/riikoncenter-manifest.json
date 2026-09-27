@@ -1,0 +1,16 @@
+{
+  "id": "konnns-extension-tools",
+  "name": "Konnns Extension Tools",
+  "description": "Bộ tiện ích web đa năng tích hợp (Whiteboard, Audio Editor, Image Editor...).",
+  "category": "utility",
+  "type": "org_app",
+  "icon": "Wrench",
+  "version": "1.0.0",
+  "author": "RiikonTeam",
+  "entryPath": "/apps/konnns-extension?path=%23%2F",
+  "tags": [
+    "Tools",
+    "Utility",
+    "Productivity"
+  ]
+}
