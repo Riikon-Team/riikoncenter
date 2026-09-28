@@ -7,7 +7,7 @@
   "icon": "Wrench",
   "version": "1.0.0",
   "author": "RiikonTeam",
-  "entryPath": "/apps/konnns-extension?path=%23%2F",
+  "entryPath": "/apps/konnns-extension-tools",
   "tags": [
     "Tools",
     "Utility",

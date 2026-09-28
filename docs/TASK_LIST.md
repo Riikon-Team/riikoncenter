@@ -76,3 +76,9 @@ Based on the `MASTER_REQUIREMENT.md`, here is the checklist of tasks required to
 ## 13. Phase 14: Polishing
 - [x] Fix Chicken Invaders input logic (Tap vs Hold separation)
 - [x] Enhance physics scaling and translation logic for game loop
+
+## 14. Phase 17: Organization Submodule Apps
+- [x] Implement Konnns Extension standalone tools as external submodule
+- [x] Implement Konnns Extension Vite wrapper for extension UI isolation
+- [x] Configure Turborepo `allowBuilds` for pnpm v11+
+- [x] Build root `.env` port fallback passing for Submodule integrations

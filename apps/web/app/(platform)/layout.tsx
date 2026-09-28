@@ -40,7 +40,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
     pathname.startsWith("/apps/zentab") || 
     pathname.startsWith("/games/galaxy-shooter") ||
     pathname.startsWith("/apps/konnns-extension");
-  const isKonnnsExtension = pathname.startsWith("/apps/konnns-extension");
+  const isKonnnsExtension = pathname === "/apps/konnns-extension";
   const isZenTab = pathname.startsWith("/apps/zentab");
   const canHideHeader = isZenTab || isKonnnsExtension;
   const [lang, setLang] = useState("en");
