@@ -68,7 +68,7 @@ export default function GalaxyShooterPage() {
         }
       `}} />
 
-      <div className="h-dvh w-screen bg-bg-deep text-text-primary font-body flex flex-col items-center select-none overflow-hidden touch-none relative">
+      <div className="dark h-dvh w-screen bg-bg-deep text-text-primary font-body flex flex-col items-center select-none overflow-hidden touch-none relative">
         <GameHeader gameScale={headerScale} actions={game.actions} />
 
         <div
