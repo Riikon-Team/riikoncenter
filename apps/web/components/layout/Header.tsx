@@ -23,7 +23,7 @@ export function Header() {
   const pathname = usePathname();
   const { t, i18n } = useTranslation("common");
   const { toggleHeaderVisibility, toggle, toggleSidebarVisibility } = useSidebarStore();
-  const isKonnnsExtension = pathname.startsWith("/apps/konnns-extension");
+  const isKonnnsExtension = pathname === "/apps/konnns-extension";
   const isZenTab = pathname.startsWith("/apps/zentab");
   const canHideHeader = isZenTab || isKonnnsExtension;
 

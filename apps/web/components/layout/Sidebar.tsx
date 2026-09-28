@@ -46,7 +46,7 @@ export function Sidebar() {
     return (
       <ul className="space-y-1">
         {apps.map(app => {
-          const isActive = pathname.startsWith(app.entryPath) && app.entryPath !== '#';
+          const isActive = (pathname === app.entryPath || pathname.startsWith(app.entryPath + "/")) && app.entryPath !== '#';
           const Icon = ICON_MAP[app.icon] || Box;
           return (
             <li key={app.id}>
