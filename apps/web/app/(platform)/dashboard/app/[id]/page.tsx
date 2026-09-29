@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useTranslation, Trans } from "react-i18next";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import { useApps } from "../../../../../lib/hooks/useApps";
 import { 
   ArrowLeft, 
@@ -176,7 +177,7 @@ export default function AppDetailsPage() {
                   {t("app_details.section_desc")}
                 </h3>
                 <div className="prose prose-sm dark:prose-invert max-w-none bg-muted/30 p-6 rounded-2xl border border-border/50 custom-scrollbar overflow-x-auto">
-                  <ReactMarkdown rehypePlugins={[rehypeRaw]}>{app.readme}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>{app.readme}</ReactMarkdown>
                 </div>
               </section>
             ) : (

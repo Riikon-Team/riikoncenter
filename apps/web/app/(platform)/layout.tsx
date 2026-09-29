@@ -39,10 +39,12 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
   const isFullScreenApp = 
     pathname.startsWith("/apps/zentab") || 
     pathname.startsWith("/games/galaxy-shooter") ||
-    pathname.startsWith("/apps/konnns-extension");
+    pathname.startsWith("/apps/konnns-extension") ||
+    pathname.startsWith("/games/vibe-card-game");
   const isKonnnsExtension = pathname === "/apps/konnns-extension";
   const isZenTab = pathname.startsWith("/apps/zentab");
-  const canHideHeader = isZenTab || isKonnnsExtension;
+  const isVibeCardGame = pathname.startsWith("/games/vibe-card-game");
+  const canHideHeader = isZenTab || isKonnnsExtension || isVibeCardGame;
   const [lang, setLang] = useState("en");
   const [isMounted, setIsMounted] = useState(false);
   const [isToolsMenuOpen, setIsToolsMenuOpen] = useState(false);
@@ -126,21 +128,23 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
                 <Eye className="w-4 h-4" />
               </button>
 
-              <button
-                onClick={() => setIsToolsMenuOpen(!isToolsMenuOpen)}
-                className={cn(
-                  "transition-opacity duration-300 p-2.5 rounded-full shadow-xl border flex items-center justify-center cursor-pointer pointer-events-auto",
-                  isToolsMenuOpen ? "opacity-100 bg-cyan-500 text-white border-cyan-400 hover:bg-cyan-600" : "opacity-0 group-hover:opacity-100 bg-background text-muted-foreground border-border hover:bg-muted"
-                )}
-                title="Tools & Apps"
-              >
-                <Wrench className="w-4 h-4" />
-              </button>
+              {!isVibeCardGame && (
+                <button
+                  onClick={() => setIsToolsMenuOpen(!isToolsMenuOpen)}
+                  className={cn(
+                    "transition-opacity duration-300 p-2.5 rounded-full shadow-xl border flex items-center justify-center cursor-pointer pointer-events-auto",
+                    isToolsMenuOpen ? "opacity-100 bg-cyan-500 text-white border-cyan-400 hover:bg-cyan-600" : "opacity-0 group-hover:opacity-100 bg-background text-muted-foreground border-border hover:bg-muted"
+                  )}
+                  title="Tools & Apps"
+                >
+                  <Wrench className="w-4 h-4" />
+                </button>
+              )}
             </div>
           )}
 
           {/* Floating Konnns Tools Menu */}
-          {isMounted && isToolsMenuOpen && (
+          {isMounted && isToolsMenuOpen && !isVibeCardGame && (
             <div className="absolute bottom-16 left-16 z-[9999] w-[450px] h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-none">
                <iframe 
                   src="http://localhost:3304/?page=popup" 

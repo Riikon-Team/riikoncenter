@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --filter=!konnn-extension",
+    "dev": "concurrently \"turbo run dev --filter=!konnn-extension\" \"pnpm run dev:vibe\" \"node apps/web/scripts/dev-proxy.mjs\"",
+    "dev:vibe": "cd external/vibe-card-game && pnpm build && concurrently \"pnpm --filter @u-no/server run start:prod\" \"pnpm --filter @u-no/client run start\" \"pnpm --filter @u-no/gateway run start\"",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "turbo": "^2.0.0",
-    "prettier": "^3.2.5"
+    "concurrently": "^10.0.5",
+    "prettier": "^3.2.5",
+    "turbo": "^2.0.0"
   },
   "packageManager": "pnpm@11.26.0",
   "pnpm": {
@@ -20,7 +22,10 @@
       "@prisma/engines": "7.8.0",
       "bcrypt": "6.0.0",
       "canvas": "3.2.3",
-      "esbuild": ["0.21.5", "0.27.7"],
+      "esbuild": [
+        "0.21.5",
+        "0.27.7"
+      ],
       "prisma": "7.8.0",
       "spawn-sync": "1.0.15",
       "tesseract.js": "7.0.0",
