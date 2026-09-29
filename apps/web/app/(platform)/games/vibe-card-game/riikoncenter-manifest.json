@@ -1,0 +1,13 @@
+{
+  "id": "vibe-card-game",
+  "name": "Ú Nồ Card Game",
+  "description": "A modern, full-stack 3D multiplayer card party game.",
+  "category": "game",
+  "type": "org_app",
+  "icon": "Gamepad2",
+  "version": "1.0.15",
+  "author": "Konnn04",
+  "entryPath": "/games/vibe-card-game",
+  "bannerBg": "from-red-600 to-orange-500",
+  "tags": ["3d", "multiplayer", "uno", "card-game", "webgl"]
+}
