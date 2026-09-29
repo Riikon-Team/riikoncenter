@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  schemas  = ["public", "riikoncenter"]
 }
 
 model User {
@@ -21,8 +20,6 @@ model User {
   preferences  Preference[]
   favorites    Favorite[]
   history      AccessHistory[]
-
-  @@schema("riikoncenter")
 }
 
 model Preference {
@@ -35,7 +32,6 @@ model Preference {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, moduleName])
-  @@schema("riikoncenter")
 }
 
 model Role {
@@ -43,8 +39,6 @@ model Role {
   name        String   @unique
   permissions String[]
   users       User[]
-
-  @@schema("riikoncenter")
 }
 
 model Favorite {
@@ -56,7 +50,6 @@ model Favorite {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, appId])
-  @@schema("riikoncenter")
 }
 
 model AccessHistory {
@@ -66,6 +59,4 @@ model AccessHistory {
   accessedAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@schema("riikoncenter")
 }
