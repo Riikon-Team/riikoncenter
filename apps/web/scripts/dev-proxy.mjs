@@ -100,6 +100,16 @@ proxy.on('error', function (err, req, res) {
 
 // Setup the HTTP Server
 const server = http.createServer(async (req, res) => {
+  // Health check endpoint for the React Dashboard to poll
+  if (req.url === '/api/health') {
+    res.writeHead(200, { 
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*' 
+    });
+    res.end(JSON.stringify({ state: unoState }));
+    return;
+  }
+
   try {
     await startUnoApp();
     proxy.web(req, res);

@@ -45,7 +45,9 @@ export async function GET() {
       return NextResponse.json({ apps: FALLBACK_BUILTIN_APPS });
     }
 
-    const repos: GitHubRepo[] = await reposRes.json();
+    const responseJson = await reposRes.json();
+    // Support both raw array (old) and standardized { data } envelope (new)
+    const repos: GitHubRepo[] = Array.isArray(responseJson) ? responseJson : (responseJson.data || []);
     const thirdPartyApps: AppManifest[] = [];
 
     // Process each repo concurrently
