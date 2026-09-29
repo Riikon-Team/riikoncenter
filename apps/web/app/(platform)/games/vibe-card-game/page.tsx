@@ -4,8 +4,9 @@ import React, { Suspense } from 'react'
 
 function VibeCardGameFrame() {
   // Point directly to the port of the standalone Vibe Card Game
-  // We use .env in the submodule to set PORT=3310 to avoid conflicts
-  const src = "http://localhost:3310"
+  // Point to our internal dev-proxy (3309) which strips the CSP header
+  // so the browser allows the iframe to render the game from 3310.
+  const src = "http://localhost:3309"
 
   return (
       <iframe 

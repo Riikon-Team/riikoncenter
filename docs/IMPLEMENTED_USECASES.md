@@ -125,3 +125,9 @@
 * **Implemented Use Cases:** `vibe-card-game` (Ú Nồ) integration, `pnpm-workspace.yaml` (Exclusion rules), `apps.ts` Games Hub registry.
 * **Architecture & Clean Code:** Added `vibe-card-game` as a Git Submodule. Protected the root monorepo (pnpm v11) from the submodule's nested pnpm v12 workspace by explicitly blacklisting `!external/vibe-card-game/**` in `pnpm-workspace.yaml`. Applied `ignore = dirty` in `.gitmodules` to prevent auto-generated assets in the submodule from dirtying the parent repo. Established a zero-touch isolation architecture using Corepack to handle multi-version package managers natively.
 * **Optimization & UI:** Registered the game into the `lib/apps.ts` internal registry and created a wrapper Iframe page. Successfully orchestrated a dedicated environment via an untracked `.env` file to dynamically route the Gateway and internal servers to non-colliding ports (`3310`, `3311`) without triggering Git changes in the submodule.
+### Integrate Vibe Card Game & Polish Dashboard App Store - 2026-09-29
+* **Implemented Use Cases:** Vibe-card-game/page.tsx, layout.tsx, dev-proxy.mjs, dashboard/app/[id]/page.tsx
+* **Architecture & Clean Code:** Bypassed Content Security Policy using a local Node.js proxy to embed Discord Activity without polluting its submodule. Injected Markdown README from Github using 
+emark-gfm and 
+ehype-raw into RiikonCenter manifests. 
+* **Optimization & UI:** Conditionally hidden unnecessary RiikonCenter UI components (Header, Tools menu) when full-screen game mode is active to optimize UX. Disabled Next.js dev overlays inside iframe by switching vibe-card-game startup mode to production via concurrently.
