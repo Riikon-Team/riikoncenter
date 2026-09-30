@@ -23,10 +23,16 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
-      const res = exception.getResponse() as any;
+      const res = exception.getResponse();
       
-      message = res.message || res;
-      errorType = res.error || exception.name;
+      if (typeof res === 'object' && res !== null) {
+        const objRes = res as Record<string, unknown>;
+        message = (objRes.message as string | string[]) || exception.message;
+        errorType = (objRes.error as string) || exception.name;
+      } else if (typeof res === 'string') {
+        message = res;
+        errorType = exception.name;
+      }
     } else if (this.isPrismaError(exception)) {
       // Prisma Error Fallbacks
       const prismaError = this.handlePrismaError(exception);
@@ -55,18 +61,19 @@ export class AllExceptionsFilter implements ExceptionFilter {
     });
   }
 
-  private isPrismaError(exception: any): boolean {
-    return exception && exception.constructor && exception.constructor.name.startsWith('PrismaClient');
+  private isPrismaError(exception: unknown): boolean {
+    return Boolean(exception && typeof exception === 'object' && exception.constructor && exception.constructor.name.startsWith('PrismaClient'));
   }
 
-  private handlePrismaError(exception: any) {
+  private handlePrismaError(exception: unknown) {
+    const err = exception as { code?: string; message: string; meta?: { target?: string[] } };
     // PrismaClientKnownRequestError
-    if (exception.code) {
-      switch (exception.code) {
+    if (err.code) {
+      switch (err.code) {
         case 'P2002': // Unique constraint failed
           return {
             statusCode: HttpStatus.CONFLICT,
-            message: `Unique constraint failed on the fields: (${exception.meta?.target?.join(', ') || 'unknown'})`,
+            message: `Unique constraint failed on the fields: (${err.meta?.target?.join(', ') || 'unknown'})`,
             errorType: 'ConflictError',
           };
         case 'P2025': // Record not found
@@ -84,7 +91,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         default:
           return {
             statusCode: HttpStatus.BAD_REQUEST,
-            message: `Database error: ${exception.message.split('\\n').pop()}`,
+            message: `Database error: ${err.message.split('\\n').pop()}`,
             errorType: 'DatabaseError',
           };
       }

@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { IUserRepository } from '../../domain/interfaces/user.repository.interface';
 import { User } from '../../domain/user.entity';
 import { PrismaService } from '../../../../prisma/prisma.service';
+import { User as PrismaUser, Role as PrismaRole } from '@prisma/client';
 
 @Injectable()
 export class PrismaUserRepository implements IUserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  private toDomain(record: any): User {
+  private toDomain(record: PrismaUser & { role?: PrismaRole | null }): User {
     return new User(
       record.id,
       record.email,

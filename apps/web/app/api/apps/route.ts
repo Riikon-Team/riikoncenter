@@ -18,10 +18,8 @@ export async function GET() {
   const token = process.env.GITHUB_PAT;
 
   if (!orgName) {
-    return NextResponse.json(
-      { error: 'NEXT_PUBLIC_GITHUB_ORG is not configured in environment variables' },
-      { status: 500 }
-    );
+    console.warn('NEXT_PUBLIC_GITHUB_ORG is not configured in environment variables. Falling back to built-in apps.');
+    return NextResponse.json({ apps: FALLBACK_BUILTIN_APPS });
   }
 
   try {
@@ -35,7 +33,8 @@ export async function GET() {
     }
 
     // Fetch repositories from our Backend using GitHub App auth
-    const reposRes = await fetch(`http://localhost:8008/api/v1/github/org-repos/${orgName}`, {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+    const reposRes = await fetch(`${apiUrl}/api/v1/github/org-repos/${orgName}`, {
       next: { revalidate: 3600 }, // Cache for 1 hour
     });
 
@@ -57,7 +56,8 @@ export async function GET() {
 
       try {
         // Fetch manifest via backend
-        const manifestUrl = `http://localhost:8008/api/v1/github/org-repos/${orgName}/${repo.name}/file/riikoncenter-manifest.json`;
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+        const manifestUrl = `${apiUrl}/api/v1/github/org-repos/${orgName}/${repo.name}/file/riikoncenter-manifest.json`;
         const manifestRes = await fetch(manifestUrl, {
           next: { revalidate: 3600 },
         });
@@ -69,7 +69,8 @@ export async function GET() {
             
             let readme = undefined;
             try {
-              const readmeRes = await fetch(`http://localhost:8008/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
+              const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+              const readmeRes = await fetch(`${apiUrl}/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
                 next: { revalidate: 3600 },
               });
               if (readmeRes.ok) {
@@ -95,7 +96,8 @@ export async function GET() {
 
       let readme = undefined;
       try {
-        const readmeRes = await fetch(`http://localhost:8008/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
+        const readmeRes = await fetch(`${apiUrl}/api/v1/github/org-repos/${orgName}/${repo.name}/readme`, {
           next: { revalidate: 3600 },
         });
         if (readmeRes.ok) {
@@ -142,6 +144,6 @@ export async function GET() {
     return NextResponse.json({ apps: allApps });
   } catch (error) {
     console.error('API /apps error:', error);
-    return NextResponse.json({ apps: FALLBACK_BUILTIN_APPS }, { status: 500 });
+    return NextResponse.json({ apps: FALLBACK_BUILTIN_APPS });
   }
 }

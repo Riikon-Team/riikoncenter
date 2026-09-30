@@ -3,26 +3,33 @@
 import React, { Suspense, useState, useEffect } from 'react'
 
 function VibeCardGameFrame() {
-  const src = "http://localhost:3309"
+  const proxyUrl = process.env.NEXT_PUBLIC_GAME_PROXY_URL || (typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.hostname}:3309` : "http://localhost:3309");
+  const src = proxyUrl;
   const [isReady, setIsReady] = useState(false)
+  const [iframeKey, setIframeKey] = useState(0)
 
   useEffect(() => {
-    // Poll the dev-proxy to check if the app has finished booting
+    let wasWaiting = false;
     const interval = setInterval(async () => {
       try {
-        const res = await fetch('http://localhost:3309/api/health')
+        const res = await fetch(`${proxyUrl}/api/health`)
         const data = await res.json()
         if (data.state === 'running') {
           setIsReady(true)
           clearInterval(interval)
+          if (wasWaiting) {
+             window.location.reload(); // Specifically requested by user to fix 502
+          }
+        } else {
+          wasWaiting = true;
         }
       } catch (err) {
-        // Dev proxy might not be up yet, keep polling
+        wasWaiting = true;
       }
     }, 1000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [proxyUrl])
 
   return (
     <div className="relative w-full h-full">

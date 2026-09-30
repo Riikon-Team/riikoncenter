@@ -7,9 +7,10 @@ function KonnnsFrame() {
   const searchParams = useSearchParams()
   const path = searchParams.get('path')
 
-  // Nếu có truyền path (ví dụ: #/whiteboard), mở trang các công cụ (page=site)
-  // Nếu không có, mở trang gốc mặc định (newtab)
-  const src = path ? `http://localhost:3304/?page=site${path}` : "http://localhost:3304"
+  // If path is provided (e.g. #/whiteboard), open the tools page (page=site)
+  // Otherwise, open the default newtab page
+  const baseUrl = process.env.NEXT_PUBLIC_KONNNS_EXTENSION_URL || "http://localhost:3304"
+  const src = path ? `${baseUrl}/?page=site${path}` : baseUrl
 
   return (
       <iframe 

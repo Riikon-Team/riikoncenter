@@ -31,7 +31,8 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     try {
-      const res = await fetch("http://localhost:8008/api/v1/auth/login", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8008";
+      const res = await fetch(`${apiUrl}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -53,9 +54,9 @@ export default function LoginPage() {
       
       router.push("/dashboard");
       toast.success(t("auth.login.success"));
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      const msg = error.message;
+      const msg = error instanceof Error ? error.message : String(error);
       if (Array.isArray(msg)) {
         toast.error(t(msg[0]) || t("auth.errors.unknown"));
       } else {

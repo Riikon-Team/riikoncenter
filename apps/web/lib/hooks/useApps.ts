@@ -21,10 +21,10 @@ export function useApps() {
           setApps(data.apps || []);
           setError(null);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (isMounted) {
           console.error(err);
-          setError(err.message || 'An error occurred');
+          setError(err instanceof Error ? err.message : 'An error occurred');
         }
       } finally {
         if (isMounted) {

@@ -50,7 +50,8 @@ export function Header() {
   const handleSignOut = async () => {
     setIsProfileOpen(false);
     try {
-      await fetch("http://localhost:8008/api/v1/auth/logout", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8008";
+      await fetch(`${apiUrl}/api/v1/auth/logout`, {
         method: "POST",
       });
     } catch (err) {

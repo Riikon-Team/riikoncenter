@@ -42,7 +42,7 @@ const diffOptions = [
 ] as const
 
 interface GameOverlaysProps {
-  actions: any
+  actions: import('../hooks/useGameActions').GameActions
 }
 
 export default function GameOverlays({ actions }: GameOverlaysProps) {
@@ -454,7 +454,7 @@ export default function GameOverlays({ actions }: GameOverlaysProps) {
               ref={fileInput}
               accept=".json"
               className="hidden"
-              onChange={importSaves as any}
+              onChange={importSaves as unknown as React.ChangeEventHandler<HTMLInputElement>}
             />
 
             <button

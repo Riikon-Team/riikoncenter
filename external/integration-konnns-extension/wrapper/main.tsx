@@ -1,13 +1,13 @@
-// 1. Tiêm "Giả dược" (Polyfill Chrome API) siêu cấp bằng Proxy
+// 1. Chrome API Polyfill via Proxy
 const mockEvent = {
   addListener: () => {},
   removeListener: () => {},
   hasListener: () => false,
 };
 
-// Hàm tạo Proxy: Tự động trả về mockEvent cho bất kỳ thuộc tính nào bắt đầu bằng chữ 'on'
-// và trả về hàm rỗng cho bất kỳ method lạ nào. Chấp mọi loại API của trình duyệt!
-const createMockApi = (base: any) => new Proxy(base, {
+// Proxy generator: Automatically returns mockEvent for any property starting with 'on'
+// and returns an empty function for any unknown method to mock browser APIs safely.
+const createMockApi = (base: Record<string, unknown>) => new Proxy(base, {
   get(target, prop) {
     if (prop in target) return target[prop];
     if (typeof prop === 'string' && prop.startsWith('on')) return mockEvent;
@@ -15,15 +15,16 @@ const createMockApi = (base: any) => new Proxy(base, {
   }
 });
 
-(window as any).chrome = {
+(window as unknown as Record<string, unknown>).chrome = {
   runtime: createMockApi({
     id: 'riikon-center-mock',
     getManifest: () => ({ version: '0.4.0' }),
     getURL: (path: string) => {
-      if (path.includes('site.html')) return "http://localhost:3304/?page=site";
-      return "http://localhost:3304" + path;
+      const origin = window.location.origin;
+      if (path.includes('site.html')) return `${origin}/?page=site`;
+      return origin + path;
     },
-    sendMessage: async (msg: any) => {
+    sendMessage: async (msg: Record<string, unknown>) => {
       if (msg && msg.type === "site:open") {
         const route = msg.route || '/';
         const targetPath = `/apps/konnns-extension?path=${encodeURIComponent(route.startsWith('#') ? route : '#' + route)}`;
@@ -35,7 +36,7 @@ const createMockApi = (base: any) => new Proxy(base, {
   tabs: createMockApi({
     query: async () => [],
     create: async ({ url }: { url: string }) => {
-      // Dùng postMessage để gửi lệnh điều hướng lên cho RiikonCenter (Next.js) thay vì sửa window.parent trực tiếp (bị chặn CORS do khác cổng)
+      // Use postMessage to send navigation commands to RiikonCenter (Next.js)
       const hash = new URL(url).hash || '#/'; 
       const targetPath = `/apps/konnns-extension?path=${encodeURIComponent(hash)}`;
       window.parent.postMessage({ type: 'NAVIGATE', path: targetPath }, '*');
@@ -49,10 +50,10 @@ const createMockApi = (base: any) => new Proxy(base, {
   scripting: createMockApi({}),
 };
 
-// Đảm bảo WXT/Browser API cũng nhận được mock
-(window as any).browser = (window as any).chrome;
+// Ensure WXT/Browser API also receives the mock
+(window as unknown as Record<string, unknown>).browser = (window as unknown as Record<string, unknown>).chrome;
 
-// 2. Tiêm "Kháng sinh" (Bẻ lái Fetch API) để lách luật CORS của Wallhaven
+// 2. Fetch API Proxy for CORS workaround
 const originalFetch = window.fetch;
 window.fetch = async (input, init) => {
   let url = typeof input === 'string' ? input : (input instanceof Request ? input.url : '');
@@ -64,7 +65,7 @@ window.fetch = async (input, init) => {
       input = new Request(url, init);
     }
   } else if (url.startsWith('https://w.wallhaven.cc')) {
-    // Chuyển hướng cho cả domain lấy ảnh của Wallhaven
+    // Redirect image domain requests
     url = url.replace('https://w.wallhaven.cc', '/wallhaven-img');
     if (typeof input === 'string') {
       input = url;
@@ -75,17 +76,17 @@ window.fetch = async (input, init) => {
   return originalFetch(input, init);
 };
 
-// 3. Tự chế "Router" siêu nhỏ gọn để Web bọc được nhiều App cùng lúc!
+// 3. Lightweight router for multi-app wrapping
 const urlParams = new URLSearchParams(window.location.search);
 const page = urlParams.get('page');
 
 if (page === 'popup') {
-  // Ép buộc chế độ tối (dark mode) để tránh bị lóe sáng trắng
+  // Force dark mode to prevent white flash
   document.documentElement.classList.add('dark');
   document.documentElement.style.setProperty('background', 'transparent', 'important');
   document.body.style.setProperty('background', 'transparent', 'important');
 
-  // Tiêm CSS để biến cái Popup thành một thẻ Card bo góc nổi lềnh bềnh, cắt phần thừa
+  // Inject CSS to style the Popup as a floating Card
   const style = document.createElement('style');
   style.innerHTML = `
     html, body {
@@ -96,29 +97,29 @@ if (page === 'popup') {
       height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end; /* Đẩy menu xuống dưới cùng, gần nút bấm */
+      justify-content: flex-end; /* Push menu to the bottom, near the trigger */
       align-items: flex-start;
     }
     #root {
-      background-color: #0f172a; /* Màu nền gốc của popup */
-      border-radius: 16px !important; /* Bo góc mạnh hơn */
+      background-color: #0f172a; /* Original popup background */
+      border-radius: 16px !important; /* Stronger border radius */
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
       width: fit-content;
       height: fit-content;
       overflow: hidden;
-      margin: 20px; /* Tạo khoảng trống để không bị cắt mất bóng (shadow) */
+      margin: 20px; /* Add spacing to prevent clipping the shadow */
     }
   `;
   document.head.appendChild(style);
 
-  // Trả về đúng cái cục Menu Tools & Apps nếu URL có ?page=popup
+  // Return Tools & Apps Menu if URL has ?page=popup
   import("@/entrypoints/popup/main.tsx");
 } else if (page === 'site') {
-  // Trả về giao diện các công cụ (Whiteboard, Audio Editor...)
+  // Return tool interfaces (Whiteboard, Audio Editor...)
   import("@/entrypoints/site/main.tsx");
 } else {
-  // Trả về cái giao diện Gốc (New Tab) nếu không truyền gì
+  // Return the default New Tab interface if no page is specified
   import("@/entrypoints/newtab/main.tsx");
 }
 

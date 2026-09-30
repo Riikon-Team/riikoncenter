@@ -10,9 +10,10 @@ import type { useControls } from './useControls'
 import type { Enemy, SaveSlot } from '../utils/types'
 import { vfx } from '../utils/vfx'
 
+export type GameActions = ReturnType<typeof useGameActions>;
 export function useGameActions(controls: ReturnType<typeof import('./useControls').useControls>) {
   const getState = useGameStore.getState;
-  const setGameState = (s: any) => getState().setGameState(s);
+  const setGameState = (s: 'playing' | 'paused' | 'resuming' | 'starting' | 'gameover') => getState().setGameState({ gameState: s });
   
 
   const { mousePressed, mobileKeys, pointerState, getKeys } = controls
@@ -125,10 +126,10 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
   }
 
   const startWave = (wave: number) => {
-    // Luôn giữ background scale là 1 (không dùng CSS transform nữa)
+    // Keep background scale at 1
     getState().globalScale = 1.0
 
-    // CHỈ THU NHỎ KÍCH THƯỚC PHI THUYỀN (PLAYER) XUỐNG CÒN 30x30 Ở MÀN 120
+    // SHRINK PLAYER TO 30x30 AT LEVEL 120
     if (getState().gameMode === 'campaign' && wave === 120) {
       getState().player.width = 30
       getState().player.height = 30
@@ -168,7 +169,7 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
     getState().engine.pendingSpawns = []
     getState().enemies = []
 
-    // XỬ LÝ BOSS
+    // BOSS HANDLING
     if (wave % 10 === 0) {
       getState().gamePhase = 'boss'
       getState().engine.hasSpawnedBoss = true
@@ -525,7 +526,7 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
       weaponType: getState().weaponType,
       weaponLevel: getState().weaponLevel,
       difficulty: getState().difficulty,
-      gameMode: getState().gameMode, // LƯU MODE
+      gameMode: getState().gameMode, // SAVE MODE
     }
     const idx = getState().saves.findIndex((s) => s.id === newSave.id)
     if (idx !== -1) getState().saves[idx] = newSave
@@ -538,7 +539,7 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
     }
     getState().currentSaveId = newSave.id
     localStorage.setItem('chicken_invaders_saves', JSON.stringify(getState().saves))
-    getState().showNotification('✅ ĐÃ LƯU GAME THÀNH CÔNG!')
+    getState().showNotification('✅ GAME SAVED SUCCESSFULLY!')
   }
 
   const surrenderGame = () => {
@@ -564,9 +565,9 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
     }
 
     if (getState().gameMode === 'campaign') {
-      getState().showNotification('🏳️ BẠN ĐÃ ĐẦU HÀNG!')
+      getState().showNotification('🏳️ YOU SURRENDERED!')
     } else {
-      getState().showNotification('🛑 ĐÃ KẾT THÚC LƯỢT CHƠI!')
+      getState().showNotification('🛑 GAME OVER!')
     }
   }
 
@@ -586,7 +587,7 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
     getState().gameState = 'starting'
     getState().engine.isTransitioningWave = true
     getState().waveAnnouncement = `WAVE ${getState().currentWave}`
-    getState().showNotification('✅ ĐÃ TẢI GAME THÀNH CÔNG!')
+    getState().showNotification('✅ GAME LOADED SUCCESSFULLY!')
 
     setTimeout(() => {
       getState().gameState = 'playing'
@@ -601,7 +602,7 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
     getState().saves = getState().saves.filter((s) => s.id !== id)
     localStorage.setItem('chicken_invaders_saves', JSON.stringify(getState().saves))
     if (getState().currentSaveId === id) getState().currentSaveId = null
-    getState().showNotification('🗑️ ĐÃ XOÁ BẢN LƯU VĨNH VIỄN!')
+    getState().showNotification('🗑️ SAVE PERMANENTLY DELETED!')
   }
 
   const exportSaves = () => {
@@ -621,7 +622,7 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
     if (!file) return
 
     if (file.size > 100 * 1024) {
-      getState().showNotification('❌ FILE QUÁ LỚN! TỐI ĐA 100KB.')
+      getState().showNotification('❌ FILE TOO LARGE! MAX 100KB.')
       target.value = ''
       return
     }
@@ -662,7 +663,7 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
                 weaponType: Math.min(Math.max(0, imported.weaponType), WEAPON_TYPES.length - 1),
                 weaponLevel: Math.max(1, imported.weaponLevel),
                 difficulty: imported.difficulty as 'easy' | 'normal' | 'hard' | 'hardcore',
-                gameMode: imported.gameMode === 'campaign' ? 'campaign' : 'endless', // Giữ mode
+                gameMode: imported.gameMode === 'campaign' ? 'campaign' : 'endless', // Keep mode
               }
               const idx = merged.findIndex((s) => s.id === safeSave.id)
               if (idx !== -1) merged[idx] = safeSave
@@ -674,12 +675,12 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
           merged = merged.slice(0, 10)
           getState().saves = merged
           localStorage.setItem('chicken_invaders_saves', JSON.stringify(getState().saves))
-          getState().showNotification('✅ ĐÃ NẠP DỮ LIỆU LƯU TRỮ THÀNH CÔNG!')
+          getState().showNotification('✅ DATA IMPORTED SUCCESSFULLY!')
         } else {
-          getState().showNotification('❌ FILE KHÔNG ĐÚNG ĐỊNH DẠNG!')
+          getState().showNotification('❌ INVALID FILE FORMAT!')
         }
       } catch {
-        getState().showNotification('❌ LỖI ĐỌC FILE DỮ LIỆU!')
+        getState().showNotification('❌ ERROR READING DATA FILE!')
       }
       target.value = ''
     }
@@ -866,4 +867,4 @@ export function useGameActions(controls: ReturnType<typeof import('./useControls
   }
 }
 
-export type GameActions = ReturnType<typeof useGameActions>
+

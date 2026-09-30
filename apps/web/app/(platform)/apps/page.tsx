@@ -52,7 +52,7 @@ export default function AppsHubPage() {
             ) : (
               <div className="h-44 w-full relative overflow-hidden border-b">
                 <ThumbnailPlaceholder 
-                  icon={(Icons as any)[app.icon] || Icons.Box}
+                  icon={(Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[app.icon] || Icons.Box}
                   iconUrl={app.iconUrl}
                   appName={app.name}
                   bannerBg={app.bannerBg}

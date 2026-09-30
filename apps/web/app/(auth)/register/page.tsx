@@ -39,7 +39,8 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsSubmitting(true);
     try {
-      const res = await fetch("http://localhost:8008/api/v1/auth/register", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8008";
+      const res = await fetch(`${apiUrl}/api/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -62,9 +63,9 @@ export default function RegisterPage() {
 
       router.push("/dashboard");
       toast.success(t("auth.register.success"));
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
-      const msg = error.message;
+      const msg = error instanceof Error ? error.message : String(error);
       if (Array.isArray(msg)) {
         toast.error(t(msg[0]) || t("auth.errors.unknown"));
       } else {

@@ -79,7 +79,7 @@ function startUnoApp() {
 
 // Create a proxy server with custom application logic
 const proxy = httpProxy.createProxyServer({
-  target: `http://localhost:${GAME_GATEWAY_PORT}`,
+  target: process.env.GAME_GATEWAY_URL || `http://127.0.0.1:${GAME_GATEWAY_PORT}`,
   ws: true,
   changeOrigin: true
 });

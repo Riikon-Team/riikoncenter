@@ -52,7 +52,7 @@ export default function GamesHubPage() {
             ) : (
               <div className="h-44 w-full relative overflow-hidden border-b">
                 <ThumbnailPlaceholder 
-                  icon={(Icons as any)[game.icon] || Icons.Box}
+                  icon={(Icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[game.icon] || Icons.Box}
                   iconUrl={game.iconUrl}
                   appName={game.name}
                   bannerBg={game.bannerBg}
