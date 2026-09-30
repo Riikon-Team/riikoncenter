@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  nginx-gateway:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web
+      - api
+      - konnns-extension
+      - konnns-tool
+      - vibe-card-game
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    env_file:
+      - .env
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+    env_file:
+      - .env
+    depends_on:
+      - api
+
+  konnns-extension:
+    build:
+      context: .
+      dockerfile: external/integration-konnns-extension/Dockerfile
+
+  konnns-tool:
+    build:
+      context: .
+      dockerfile: external/integration-konnns-tool/Dockerfile
+    env_file:
+      - .env
+    environment:
+      - PORT=${KONNNS_TOOL_PORT}
+
+  vibe-card-game:
+    build:
+      context: .
+      dockerfile: external/integration-vibe-card-game/Dockerfile
+      args:
+        - NEXT_PUBLIC_SOCKET_URL=${VIBE_PUBLIC_SOCKET_URL}
+    env_file:
+      - .env
+    environment:
+      - PORT=${VIBE_PORT}
+      - SERVER_PORT=${VIBE_SERVER_PORT}
+      - INTERNAL_SERVER_URL=${VIBE_INTERNAL_SERVER_URL}
+      - CLIENT_PORT=${VIBE_CLIENT_PORT}
+      - INTERNAL_CLIENT_URL=${VIBE_INTERNAL_CLIENT_URL}
+      - NEXT_PUBLIC_SOCKET_URL=${VIBE_PUBLIC_SOCKET_URL}
+
