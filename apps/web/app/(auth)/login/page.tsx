@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useAuthStore } from "../../../store/useAuthStore";
+import { authService } from "../../../services/authService";
 
 export default function LoginPage() {
   const { t } = useTranslation("common");
@@ -31,22 +32,10 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8008";
-      const res = await fetch(`${apiUrl}/api/v1/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-        }),
+      const { data: responseData } = await authService.login({
+        email: data.email,
+        password: data.password,
       });
-      
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Invalid credentials");
-      }
-      
-      const responseData = await res.json();
       
       if (responseData.user) {
         setUser(responseData.user);
@@ -56,12 +45,10 @@ export default function LoginPage() {
       toast.success(t("auth.login.success"));
     } catch (error: unknown) {
       console.error(error);
-      const msg = error instanceof Error ? error.message : String(error);
-      if (Array.isArray(msg)) {
-        toast.error(t(msg[0]) || t("auth.errors.unknown"));
-      } else {
-        toast.error(t(msg) || t("auth.errors.unknown"));
-      }
+      const err = error as { response?: { data?: { message?: string | string[] } } };
+      const rawMsg = err.response?.data?.message || (error instanceof Error ? error.message : String(error));
+      const msg = Array.isArray(rawMsg) ? rawMsg[0] : rawMsg;
+      toast.error(typeof msg === 'string' ? t(msg) : t("auth.errors.unknown"));
     } finally {
       setIsSubmitting(false);
     }

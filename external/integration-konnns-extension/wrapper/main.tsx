@@ -1,7 +1,7 @@
 // 1. Chrome API Polyfill via Proxy
 const mockEvent = {
-  addListener: () => {},
-  removeListener: () => {},
+  addListener: () => { },
+  removeListener: () => { },
   hasListener: () => false,
 };
 
@@ -9,7 +9,7 @@ const mockEvent = {
 // and returns an empty function for any unknown method to mock browser APIs safely.
 const createMockApi = (base: Record<string, unknown>) => new Proxy(base, {
   get(target, prop) {
-    if (prop in target) return target[prop];
+    if (typeof prop === 'string' && prop in target) return target[prop];
     if (typeof prop === 'string' && prop.startsWith('on')) return mockEvent;
     return async () => ({});
   }
@@ -26,7 +26,7 @@ const createMockApi = (base: Record<string, unknown>) => new Proxy(base, {
     },
     sendMessage: async (msg: Record<string, unknown>) => {
       if (msg && msg.type === "site:open") {
-        const route = msg.route || '/';
+        const route = typeof msg.route === 'string' ? msg.route : '/';
         const targetPath = `/apps/konnns-extension?path=${encodeURIComponent(route.startsWith('#') ? route : '#' + route)}`;
         window.parent.postMessage({ type: 'NAVIGATE', path: targetPath }, '*');
       }
@@ -37,7 +37,7 @@ const createMockApi = (base: Record<string, unknown>) => new Proxy(base, {
     query: async () => [],
     create: async ({ url }: { url: string }) => {
       // Use postMessage to send navigation commands to RiikonCenter (Next.js)
-      const hash = new URL(url).hash || '#/'; 
+      const hash = new URL(url).hash || '#/';
       const targetPath = `/apps/konnns-extension?path=${encodeURIComponent(hash)}`;
       window.parent.postMessage({ type: 'NAVIGATE', path: targetPath }, '*');
       return {};
