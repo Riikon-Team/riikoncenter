@@ -57,11 +57,11 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
   }, [pathname, canHideHeader, isHeaderVisible, setHeaderVisible]);
 
   useEffect(() => {
-    // Lắng nghe lệnh điều hướng (NAVIGATE) từ popup iframe gửi lên
+    // Listen for NAVIGATE commands from the popup iframe
     const handleMessage = (event: MessageEvent) => {
       if (event.data?.type === 'NAVIGATE' && event.data?.path) {
-        setIsToolsMenuOpen(false); // Đóng menu
-        router.push(event.data.path); // Soft Navigation của Next.js (không reload cả trang)
+        setIsToolsMenuOpen(false); // Close menu
+        router.push(event.data.path); // Next.js Soft Navigation
       }
     };
     window.addEventListener('message', handleMessage);
@@ -147,7 +147,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           {isMounted && isToolsMenuOpen && !isVibeCardGame && (
             <div className="absolute bottom-16 left-16 z-[9999] w-[450px] h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-none">
                <iframe 
-                  src="http://localhost:3304/?page=popup" 
+                  src={`${process.env.NEXT_PUBLIC_KONNNS_EXTENSION_URL || 'http://localhost:3304'}/?page=popup`} 
                   width="100%" 
                   height="100%" 
                   className="border-none bg-transparent pointer-events-auto"

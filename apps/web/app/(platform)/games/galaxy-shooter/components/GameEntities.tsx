@@ -142,8 +142,8 @@ export default function GameEntities() {
                 style={
                   !enemy.isMeteor && !enemy.isStash
                     ? {
-                        color: (enemy as any).shirtColor || '#ef4444',
-                        filter: `drop-shadow(0 0 10px ${(enemy as any).shirtColor || '#ef4444'})`,
+                        color: enemy.shirtColor || '#ef4444',
+                        filter: `drop-shadow(0 0 10px ${enemy.shirtColor || '#ef4444'})`,
                       }
                     : {}
                 }

@@ -5,7 +5,7 @@ import React, { Suspense } from 'react'
 function ToolsFrame() {
   // Point directly to the port of the standalone Next.js repo
   // We rely on the default port 3000 since we should not modify the submodule
-  const src = "http://localhost:3000"
+  const src = process.env.NEXT_PUBLIC_KONNNS_EXTENSION_TOOLS_URL || "http://localhost:3000"
 
   return (
       <iframe 

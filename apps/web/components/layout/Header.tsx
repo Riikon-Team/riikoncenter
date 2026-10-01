@@ -18,6 +18,7 @@ import {
 import { useSidebarStore } from "../../store/useSidebarStore";
 import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@riikoncenter/ui";
+import { authService } from "../../services/authService";
 
 export function Header() {
   const pathname = usePathname();
@@ -50,9 +51,7 @@ export function Header() {
   const handleSignOut = async () => {
     setIsProfileOpen(false);
     try {
-      await fetch("http://localhost:8008/api/v1/auth/logout", {
-        method: "POST",
-      });
+      await authService.logout();
     } catch (err) {
       console.error("Logout error", err);
     }

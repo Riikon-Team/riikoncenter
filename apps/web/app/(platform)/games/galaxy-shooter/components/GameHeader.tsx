@@ -15,7 +15,7 @@ const diffMap: Record<string, { color: string }> = {
 
 interface GameHeaderProps {
   gameScale: number
-  actions: any
+  actions: import('../hooks/useGameActions').GameActions
 }
 
 export default function GameHeader({ gameScale, actions }: GameHeaderProps) {

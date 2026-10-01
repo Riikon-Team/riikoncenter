@@ -5,19 +5,19 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { AppManifest } from "../../../lib/apps";
 import { useApps } from "../../../lib/hooks/useApps";
-import { 
-  Clock, 
-  GraduationCap, 
-  Gamepad2, 
-  BarChart3, 
-  Kanban, 
-  Trophy, 
-  Search, 
-  ExternalLink, 
-  Info, 
-  Layers, 
-  Box, 
-  GitBranch, 
+import {
+  Clock,
+  GraduationCap,
+  Gamepad2,
+  BarChart3,
+  Kanban,
+  Trophy,
+  Search,
+  ExternalLink,
+  Info,
+  Layers,
+  Box,
+  GitBranch,
   ChevronRight,
   Star,
   LayoutGrid
@@ -48,12 +48,12 @@ export default function RiikonHubDashboardPage() {
 
   const filterApp = (app: AppManifest) => {
     const matchesCategory = activeCategory === "all" || app.category === activeCategory;
-    
+
     // Check translation or fallback to original text for search
     const translatedName = t(`apps.${app.id}.name`, app.name);
     const translatedDesc = t(`apps.${app.id}.description`, app.description);
 
-    const matchesSearch = 
+    const matchesSearch =
       translatedName.toLowerCase().includes(searchQuery.toLowerCase()) ||
       translatedDesc.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.tags?.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -75,17 +75,17 @@ export default function RiikonHubDashboardPage() {
 
   return (
     <div className="min-h-full p-6 md:p-10 space-y-12 max-w-7xl mx-auto">
-      
+
       {/* Hero Section - Geometric Minimalism */}
       <div className="relative border border-border bg-card p-8 md:p-12 overflow-hidden shadow-sm rounded-3xl">
         {/* Ambient Cyan/Blue Blobs */}
         <div className="absolute top-[-10%] right-[-5%] w-64 h-64 bg-cyan-500/10 dark:bg-cyan-500/15 rounded-full blur-[80px] pointer-events-none" />
         <div className="absolute bottom-[-10%] right-[10%] w-48 h-48 bg-blue-600/10 dark:bg-blue-600/15 rounded-full blur-[60px] pointer-events-none" />
-        
+
         {/* Geometric accent */}
         <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-border/50 bg-muted/10 rounded-bl-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-16 w-16 h-16 border-t border-l border-border/50 bg-cyan-500/5 rounded-tl-xl pointer-events-none" />
-        
+
         <div className="relative z-10 max-w-2xl space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted border border-border text-xs font-semibold tracking-wide uppercase text-muted-foreground rounded-full">
             <LayoutGrid className="w-3.5 h-3.5" /> {t("dashboard.hero_badge", "Platform Dashboard")}
@@ -117,7 +117,7 @@ export default function RiikonHubDashboardPage() {
 
       {/* Control Bar: Categories & Search */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center">
-        
+
         {/* Category Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 hide-scrollbar">
           {CATEGORIES.map((cat) => (
@@ -270,18 +270,18 @@ function AppCard({ app }: { app: AppManifest }) {
 
   return (
     <div className="group relative bg-card border border-border flex flex-col overflow-hidden transition-all duration-300 hover:border-cyan-500/30 rounded-2xl hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(255,255,255,0.02)]">
-      
+
       {/* Thumbnail Area */}
       {app.thumbnail && (
         <div className={cn("relative w-full h-40 overflow-hidden shrink-0 bg-muted")}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={app.thumbnail} alt={appName} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-          
+
           {/* Absolute Tags / Badges on top of thumbnail */}
           <div className="absolute top-3 left-3 flex gap-2">
-             <span className="text-[10px] font-bold px-2 py-1 rounded-md bg-background/80 backdrop-blur-md text-foreground capitalize shadow-sm">
-               {categoryLabels[app.category]}
-             </span>
+            <span className="text-[10px] font-bold px-2 py-1 rounded-md bg-background/80 backdrop-blur-md text-foreground capitalize shadow-sm">
+              {categoryLabels[app.category]}
+            </span>
           </div>
 
           {/* Favorite Button on Thumbnail */}
@@ -302,7 +302,7 @@ function AppCard({ app }: { app: AppManifest }) {
 
       {/* Content Area */}
       <div className="p-5 flex flex-col flex-1">
-        
+
         {/* Top Header inside card */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
@@ -343,7 +343,7 @@ function AppCard({ app }: { app: AppManifest }) {
               </div>
             </div>
           </div>
-          
+
           {/* Favorite Button for non-thumbnail */}
           {!app.thumbnail && (
             <button
@@ -368,8 +368,8 @@ function AppCard({ app }: { app: AppManifest }) {
         {app.tags && app.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-5 mt-auto">
             {app.tags.slice(0, 3).map((tag) => (
-              <span 
-                key={tag} 
+              <span
+                key={tag}
                 className="text-[9px] tracking-normal font-semibold bg-muted text-muted-foreground px-2 py-0.5 border border-border rounded-md"
               >
                 {tag}
@@ -384,32 +384,40 @@ function AppCard({ app }: { app: AppManifest }) {
         )}
 
         {/* Card Actions */}
-        <div className="pt-4 border-t border-border flex items-center justify-between gap-3 mt-auto">
-          <Link
-          href={`/dashboard/app/${app.id}`}
-          className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-lg hover:bg-muted"
-        >
-          <Info className="w-3.5 h-3.5" /> {t("app_card.action_details", "Details")}
-        </Link>
-
-        {isThirdParty ? (
-          <a
-            href={app.repoUrl || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-4 py-2 transition-all rounded-xl"
-          >
-            {t("app_card.action_repo", "Repo")} <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        ) : (
-          <Link
-            href={app.entryPath}
-            onClick={() => addRecentApp(app.id)}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:pl-6 group-hover:pr-4"
-          >
-            {t("app_card.action_open", "Open")} <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
-        )}
+        <div className={cn("pt-4 border-t border-border flex items-center gap-3 mt-auto", app.type === 'org_app' ? "justify-end" : "justify-between")}>
+          {app.type !== 'org_app' && (
+            <Link
+              href={`/dashboard/app/${app.id}`}
+              className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-lg hover:bg-muted"
+            >
+              <Info className="w-3.5 h-3.5" /> {t("app_card.action_details", "Details")}
+            </Link>
+          )}
+          {isThirdParty ? (
+            <a
+              href={app.repoUrl || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-4 py-2 transition-all rounded-xl"
+            >
+              {t("app_card.action_repo", "Repo")} <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          ) : app.type === "org_app" ? (
+            <Link
+              href={`/dashboard/app/${app.id}`}
+              className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:px-6"
+            >
+              {t("app_card.action_details", "Details")} <Info className="w-3.5 h-3.5" />
+            </Link>
+          ) : (
+            <Link
+              href={app.entryPath}
+              onClick={() => addRecentApp(app.id)}
+              className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:pl-6 group-hover:pr-4"
+            >
+              {t("app_card.action_open", "Open")} <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          )}
         </div>
       </div>
 

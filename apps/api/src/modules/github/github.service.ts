@@ -10,7 +10,7 @@ export class GithubService implements OnModuleInit {
   private readonly logger = new Logger(GithubService.name);
   
   // Fallback cache in case Redis is down
-  private fallbackCache = new Map<string, { data: any, expiresAt: number }>();
+  private fallbackCache = new Map<string, { data: unknown, expiresAt: number }>();
 
   constructor(
     @Inject('REDIS_CLIENT') private readonly redis: Redis,

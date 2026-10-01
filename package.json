@@ -4,13 +4,15 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "concurrently \"turbo run dev --filter=!konnn-extension\" \"pnpm run dev:vibe\" \"node apps/web/scripts/dev-proxy.mjs\"",
-    "dev:vibe": "cd external/vibe-card-game && pnpm build && concurrently \"pnpm --filter @u-no/server run start:prod\" \"pnpm --filter @u-no/client run start\" \"pnpm --filter @u-no/gateway run start\"",
+    "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:generate": "pnpm --filter api run db:generate",
+    "db:push": "pnpm --filter api run db:push"
   },
   "devDependencies": {
     "concurrently": "^10.0.5",
+    "dotenv-cli": "^11.0.0",
     "prettier": "^3.2.5",
     "turbo": "^2.0.0"
   },
@@ -29,7 +31,8 @@
       "prisma": "7.8.0",
       "spawn-sync": "1.0.15",
       "tesseract.js": "7.0.0",
-      "unrs-resolver": "1.12.2"
+      "unrs-resolver": "1.12.2",
+      "@swc/core": "*"
     }
   }
 }

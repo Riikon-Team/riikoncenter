@@ -114,7 +114,7 @@ export default function GalaxyShooterPage() {
               onPointerMove={(e) => {
                 game.setPointerState(e.clientX, e.clientY, undefined)
               }}
-              onPointerDown={game.handleBoardPointerDown as any}
+              onPointerDown={game.handleBoardPointerDown as unknown as React.PointerEventHandler<HTMLDivElement>}
               onPointerUp={() => {
                 game.setPointerState(undefined, undefined, false)
               }}

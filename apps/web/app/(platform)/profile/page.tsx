@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { User, Mail, Shield, History, Settings, Star, Info, Clock, GraduationCap, Gamepad2, BarChart3, Kanban, Trophy, Box } from "lucide-react";
-import { parseJwt, JwtPayload } from "../../../lib/auth";
+import { useAuthStore } from "../../../store/useAuthStore";
 import { useAppStore } from "../../../store/useAppStore";
 import { AppManifest } from "../../../lib/apps";
 import { useApps } from "../../../lib/hooks/useApps";
@@ -78,8 +78,8 @@ function ProfileAppCard({ app }: { app: AppManifest }) {
 
       {/* Content Area */}
       <Link 
-        href={app.entryPath} 
-        onClick={() => addRecentApp(app.id)}
+        href={app.type === 'org_app' ? `/dashboard/app/${app.id}` : app.entryPath} 
+        onClick={() => app.type !== 'org_app' && addRecentApp(app.id)}
         className="flex-1 p-4 flex flex-col justify-between"
       >
         <div>
@@ -94,7 +94,7 @@ function ProfileAppCard({ app }: { app: AppManifest }) {
 export default function ProfilePage() {
   const { t } = useTranslation("common");
   const router = useRouter();
-  const [user, setUser] = useState<JwtPayload | null>(null);
+  const { user: authUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState("settings");
   const [mounted, setMounted] = useState(false);
 
@@ -102,18 +102,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     setMounted(true);
-    const token = localStorage.getItem("riikon_access_token");
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-    const payload = parseJwt(token);
-    if (payload) {
-      setUser(payload);
-    } else {
+    if (!authUser) {
       router.push("/login");
     }
-  }, [router]);
+  }, [authUser, router]);
 
   const { apps: allApps } = useApps();
   const favoriteApps = mounted ? favoriteAppIds.map(id => allApps.find(a => a.id === id)).filter(Boolean) as AppManifest[] : [];
@@ -154,10 +146,10 @@ export default function ProfilePage() {
               <User className="w-10 h-10 text-muted-foreground" />
             </div>
             <h2 className="text-xl font-bold text-foreground">
-              {user ? user.email.split('@')[0] : "Loading..."}
+              {authUser ? authUser.email.split('@')[0] : "Loading..."}
             </h2>
             <p className="text-xs text-muted-foreground mt-1 flex items-center justify-center gap-1.5">
-              <Mail className="w-3.5 h-3.5" /> {user?.email || "loading@example.com"}
+              <Mail className="w-3.5 h-3.5" /> {authUser?.email || "loading@example.com"}
             </p>
             <div className="mt-4 px-3 py-1 bg-primary/10 text-primary border border-primary/20 rounded-full text-xs font-semibold">
               {t("profile.role_user", "User")}
@@ -197,8 +189,8 @@ export default function ProfilePage() {
                     <label className="text-xs font-medium text-muted-foreground">{t("profile.full_name", "Full name")}</label>
                     <input 
                       type="text" 
-                      defaultValue={user ? user.email.split('@')[0] : ""} 
-                      key={`fullname-${user?.sub}`}
+                      defaultValue={authUser ? authUser.email.split('@')[0] : ""} 
+                      key={`fullname-${authUser?.id}`}
                       className="w-full bg-background border border-border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-foreground transition-colors"
                     />
                   </div>
@@ -206,8 +198,8 @@ export default function ProfilePage() {
                     <label className="text-xs font-medium text-muted-foreground">{t("profile.display_name", "Display name")}</label>
                     <input 
                       type="text" 
-                      defaultValue={user ? user.email.split('@')[0] : ""} 
-                      key={`display-${user?.sub}`}
+                      defaultValue={authUser ? authUser.email.split('@')[0] : ""} 
+                      key={`display-${authUser?.id}`}
                       className="w-full bg-background border border-border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-foreground transition-colors"
                     />
                   </div>
@@ -217,8 +209,8 @@ export default function ProfilePage() {
                   <label className="text-xs font-medium text-muted-foreground">{t("profile.email", "Email address")}</label>
                   <input 
                     type="email" 
-                    defaultValue={user?.email || ""} 
-                    key={`email-${user?.sub}`}
+                    defaultValue={authUser?.email || ""} 
+                    key={`email-${authUser?.id}`}
                     className="w-full bg-background border border-border px-3 py-2 rounded-xl text-sm focus:outline-none focus:border-foreground transition-colors"
                     disabled
                   />

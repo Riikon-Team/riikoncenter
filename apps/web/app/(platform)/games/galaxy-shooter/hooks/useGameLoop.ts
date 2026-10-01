@@ -15,7 +15,7 @@ import type { useControls } from './useControls'
 import type { GameActions } from './useGameActions'
 import type { Enemy, Boss } from '../utils/types'
 
-export function useGameLoop(controls: ReturnType<typeof import('./useControls').useControls>, actions: any) {
+export function useGameLoop(controls: ReturnType<typeof import('./useControls').useControls>, actions: GameActions) {
   const getState = useGameStore.getState;
   
 
@@ -23,7 +23,7 @@ export function useGameLoop(controls: ReturnType<typeof import('./useControls').
   const { fireBullets, handleEnemyDeath, takeDamage, addScore, startWave } = actions
 
   let animationFrameId: number
-  const EGG_SPEED = 2.0 // Giữ nguyên tốc độ mặc định trong file gốc
+  const EGG_SPEED = 2.0 // Keep default speed from original file
 
   const gameLoop = () => {
     if (getState().gameState !== 'playing' && getState().gameState !== 'starting') {
@@ -656,7 +656,7 @@ export function useGameLoop(controls: ReturnType<typeof import('./useControls').
                 } else if (r < 0.6) {
                   b.state = 'laser_warning'
                   b.stateTimer = 60
-                  // FIX LỖI 1 GÓC MÀN BẰNG CÁCH CHỐT TOẠ ĐỘ TUYỆT ĐỐI NGAY LÚC GỒNG
+                  // LOCK ABSOLUTE COORDINATES WHILE CHARGING TO FIX CORNER BUG
                   b.laserXs = [
                     b.x + b.width * 0.15 - 40,
                     b.x + b.width * 0.5 - 40,
@@ -666,21 +666,21 @@ export function useGameLoop(controls: ReturnType<typeof import('./useControls').
                 } else {
                   b.state = 'laser_warning'
                   b.stateTimer = 60
-                  b.laserX = b.x + b.width * 0.5 - 40 // Chốt toạ độ tia giữa
+                  b.laserX = b.x + b.width * 0.5 - 40 // Lock middle ray coordinate
                   b.laserXs = undefined
                 }
               } else if (b.state === 'laser_warning') {
                 b.state = 'laser_firing'
-                b.stateTimer = 40 // Thời gian tia laser xả ra
+                b.stateTimer = 40 // Laser firing duration
               } else if (b.state === 'laser_firing') {
                 b.state = 'idle'
-                b.stateTimer = 60 // Nghỉ xả hơi
+                b.stateTimer = 60 // Rest duration
                 b.laserX = undefined
                 b.laserXs = undefined
               }
             }
 
-            // GÀ VẪN DI CHUYỂN BÌNH THƯỜNG LIÊN TỤC
+            // CHICKEN CONTINUES NORMAL MOVEMENT
             let bSpeed = getState().engine.waveEnemySpeed * 0.8
             if (b.state === 'dash') bSpeed = getState().engine.waveEnemySpeed + 3
 
@@ -690,12 +690,12 @@ export function useGameLoop(controls: ReturnType<typeof import('./useControls').
               b.x = Math.max(0, Math.min(b.x, getState().activeWidth - b.width))
             }
 
-            // Xử lý sát thương Laser dựa trên toạ độ đã chốt (Laser đứng im, gà đi mất)
+            // Process Laser damage based on locked coordinates (Laser stands still, chicken moves away)
             if (b.state === 'laser_firing') {
               const lxs = b.laserXs || (b.laserX !== undefined ? [b.laserX] : [])
               lxs.forEach((absoluteX) => {
                 const laserHitbox = {
-                  x: absoluteX, // Đã trừ 40px lúc chốt để căn giữa tia 80px
+                  x: absoluteX, // Subtracted 40px during lock to center 80px ray
                   y: b.y + b.height,
                   width: 80,
                   height: getState().activeHeight,
