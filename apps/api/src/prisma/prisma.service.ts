@@ -7,7 +7,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor() {
     const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/riikoncenter?schema=public';
-    
+
     // Extract schema from URL or default to public
     let schema = 'public';
     try {
@@ -23,13 +23,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
       ssl: process.env.DATABASE_URL?.includes('supabase') ? { rejectUnauthorized: false } : undefined
     });
 
-    // CRITICAL: The 'pg' driver ignores the ?schema= query parameter in connection strings.
-    // We must manually execute SET search_path whenever a new connection is established in the pool.
     pool.on('connect', (client) => {
       client.query(`SET search_path TO "${schema}", "public"`);
     });
 
-    const adapter = new PrismaPg(pool);
+    const adapter = new PrismaPg(pool, { schema });
     super({ adapter });
   }
 

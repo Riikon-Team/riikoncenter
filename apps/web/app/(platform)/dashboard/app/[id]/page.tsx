@@ -145,12 +145,12 @@ export default function AppDetailsPage() {
           </div>
           
           <div className="shrink-0 flex flex-col gap-3 w-full md:w-auto mt-4 md:mt-0">
-            {isThirdParty ? (
+            {isThirdParty || app.type === "org_app" ? (
               <a 
                 href={app.repoUrl || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex justify-center items-center gap-2 bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
+                className="w-full flex justify-center items-center gap-2 bg-foreground hover:bg-foreground/90 text-background px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
               >
                 {t("app_details.action_repo")} <ExternalLink className="w-4 h-4" />
               </a>

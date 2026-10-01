@@ -1,7 +1,0 @@
-[submodule "external/integration-konnns-tool/tools"]
-	path = external/integration-konnns-tool/tools
-	url = https://github.com/Riikon-Team/tools
-[submodule "external/vibe-card-game"]
-	path = external/vibe-card-game
-	url = https://github.com/Riikon-Team/vibe-card-game
-	ignore = dirty

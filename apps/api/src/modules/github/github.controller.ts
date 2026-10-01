@@ -17,13 +17,11 @@ export class GithubController {
 
   @Get('org-repos/:org/:repo/readme')
   async getRepoReadme(@Param('org') org: string, @Param('repo') repo: string) {
-    const readme = await this.githubService.getRepoReadme(org, repo);
-    return { data: readme };
+    return this.githubService.getRepoReadme(org, repo);
   }
 
   @Get('org-repos/:org/:repo/file/:path(*)')
   async getRepoFile(@Param('org') org: string, @Param('repo') repo: string, @Param('path') path: string) {
-    const fileContent = await this.githubService.getRepoFile(org, repo, path);
-    return { data: fileContent };
+    return this.githubService.getRepoFile(org, repo, path);
   }
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AppManifest } from '../apps';
+import { fetchAppsService } from '../../services/appService';
 
 export function useApps() {
   const [apps, setApps] = useState<AppManifest[]>([]);
@@ -11,20 +12,15 @@ export function useApps() {
 
     async function fetchApps() {
       try {
-        const res = await fetch('/api/apps');
-        if (!res.ok) {
-          throw new Error('Failed to fetch apps');
-        }
-        const data = await res.json();
-        
+        const appsData = await fetchAppsService();
         if (isMounted) {
-          setApps(data.apps || []);
+          setApps(appsData);
           setError(null);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (isMounted) {
           console.error(err);
-          setError(err.message || 'An error occurred');
+          setError(err instanceof Error ? err.message : 'An error occurred');
         }
       } finally {
         if (isMounted) {

@@ -75,9 +75,9 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
     }
 
     try {
-      let userData: any = null;
-      let reposData: any = [];
-      let eventsData: any[] = [];
+      let userData: Record<string, unknown> | null = null;
+      let reposData: Record<string, unknown>[] = [];
+      let eventsData: Record<string, unknown>[] = [];
       let isFallbackUsed = false;
 
       // Try fetching standard GitHub User profile
@@ -132,9 +132,9 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       let languagesMap: { [key: string]: number } = {};
 
       if (Array.isArray(reposData)) {
-        reposData.forEach((repo: any) => {
-          stars += repo.stargazers_count || repo.stargazersCount || 0;
-          const lang = repo.language || repo.primaryLanguage;
+        reposData.forEach((repo: Record<string, unknown>) => {
+          stars += (repo.stargazers_count as number) || (repo.stargazersCount as number) || 0;
+          const lang = (repo.language as string) || (repo.primaryLanguage as string);
           if (lang) {
             languagesMap[lang] = (languagesMap[lang] || 0) + 1;
           }
@@ -157,23 +157,23 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       let topRepos: { name: string; description: string; stars: number; url: string; language: string; }[] = [];
       if (Array.isArray(reposData)) {
         topRepos = [...reposData]
-          .sort((a, b) => (b.stargazers_count || b.stargazersCount || 0) - (a.stargazers_count || a.stargazersCount || 0))
+          .sort((a, b) => ((b.stargazers_count as number) || (b.stargazersCount as number) || 0) - ((a.stargazers_count as number) || (a.stargazersCount as number) || 0))
           .slice(0, 3)
           .map(repo => ({
-            name: repo.name || 'Unknown',
-            description: repo.description || '',
-            stars: repo.stargazers_count || repo.stargazersCount || 0,
-            url: repo.html_url || repo.url || '#',
-            language: repo.language || repo.primaryLanguage || ''
+            name: (repo.name as string) || 'Unknown',
+            description: (repo.description as string) || '',
+            stars: (repo.stargazers_count as number) || (repo.stargazersCount as number) || 0,
+            url: (repo.html_url as string) || (repo.url as string) || '#',
+            language: (repo.language as string) || (repo.primaryLanguage as string) || ''
           }));
       }
 
-      const publicRepos = userData.public_repos ?? userData.publicRepos ?? reposData.length ?? 0;
-      const followersCount = userData.followers ?? 0;
-      const followingCount = userData.following ?? 0;
+      const publicRepos = (userData.public_repos as number) ?? (userData.publicRepos as number) ?? reposData.length ?? 0;
+      const followersCount = (userData.followers as number) ?? 0;
+      const followingCount = (userData.following as number) ?? 0;
 
       // 1. Fetch full-year/24-week raw contribution calendar from multiple highly reliable public endpoints
-      let contributionsData: any[] = [];
+      let contributionsData: Record<string, unknown>[] = [];
       try {
         const contribRes = await fetch(`https://github-contributions-api.deno.dev/${user}.json`);
         if (contribRes.ok) {
@@ -221,9 +221,9 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       }
 
       // Flatten 2D contributions data if returned in weekly segments (as in deno-github-contributions-api)
-      let flattenedContributions: any[] = [];
+      let flattenedContributions: Record<string, unknown>[] = [];
       if (Array.isArray(contributionsData)) {
-        contributionsData.forEach((item: any) => {
+        contributionsData.forEach((item: Record<string, unknown>) => {
           if (Array.isArray(item)) {
             flattenedContributions.push(...item);
           } else {
@@ -238,7 +238,7 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
         totalAnnualContributions = flattenedContributions.reduce((sum, c) => {
           if (!c) return sum;
           const val = c.count !== undefined ? c.count : (c.contributionCount !== undefined ? c.contributionCount : (c.value || 0));
-          return sum + val;
+          return sum + (val as number);
         }, 0);
       }
 
@@ -303,10 +303,10 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       }
 
       const fetchedStats: GitHubStats = {
-        username: userData.login || userData.username || user,
-        fullName: userData.name || userData.login || user,
-        avatarUrl: userData.avatar_url || userData.avatarUrl || `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&q=80`,
-        bio: userData.bio || '',
+        username: (userData.login as string) || (userData.username as string) || user,
+        fullName: (userData.name as string) || (userData.login as string) || user,
+        avatarUrl: (userData.avatar_url as string) || (userData.avatarUrl as string) || `https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&q=80`,
+        bio: (userData.bio as string) || '',
         followers: String(followersCount),
         following: String(followingCount),
         stars,
@@ -319,7 +319,15 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       };
 
       const now = new Date();
-      const activityDays: any[] = [];
+      const activityDays: {
+        dateString: string;
+        dayName: string;
+        count: number;
+        commits: number;
+        prs: number;
+        issues: number;
+        others: number;
+      }[] = [];
       
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
@@ -346,12 +354,12 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       // Initialize events map with the real historical contributions!
       const allEventsMap: Record<string, number> = {};
       if (Array.isArray(flattenedContributions) && flattenedContributions.length > 0) {
-        flattenedContributions.forEach((contrib: any) => {
+        flattenedContributions.forEach((contrib: Record<string, unknown>) => {
           if (contrib) {
-            const cDate = contrib.date || contrib.dateString || contrib.day;
+            const cDate = (contrib.date as string) || (contrib.dateString as string) || (contrib.day as string);
             const cVal = contrib.count !== undefined ? contrib.count : (contrib.contributionCount !== undefined ? contrib.contributionCount : (contrib.value || 0));
             if (cDate) {
-              allEventsMap[cDate] = cVal;
+              allEventsMap[cDate] = cVal as number;
             }
           }
         });
@@ -361,7 +369,7 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       if (Array.isArray(eventsData) && eventsData.length > 0) {
         eventsData.forEach((event) => {
           if (!event.created_at) return;
-          const eventDateStr = event.created_at.split('T')[0];
+          const eventDateStr = (event.created_at as string).split('T')[0];
           const type = event.type;
           
           let count = 0;
@@ -371,7 +379,8 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
           let othersCount = 0;
 
           if (type === 'PushEvent') {
-            commitsCount = Array.isArray(event.payload?.commits) ? event.payload.commits.length : 1;
+            const payload = event.payload as Record<string, unknown>;
+            commitsCount = Array.isArray(payload?.commits) ? payload.commits.length : 1;
             count = commitsCount;
           } else if (type === 'PullRequestEvent') {
             prsCount = 1;
@@ -450,7 +459,15 @@ function GitHubDialog({ settings, onClose }: GitHubDialogProps) {
       setStats(offlineStats);
 
       const now = new Date();
-      const activityDays = [];
+      const activityDays: {
+        dateString: string;
+        dayName: string;
+        count: number;
+        commits: number;
+        prs: number;
+        issues: number;
+        others: number;
+      }[] = [];
       
       for (let i = 6; i >= 0; i--) {
         const d = new Date();

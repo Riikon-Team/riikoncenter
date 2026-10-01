@@ -3,9 +3,8 @@
 import React from "react";
 import { cn } from "@riikoncenter/ui";
 import { useTranslation } from "react-i18next";
-import * as Icons from "lucide-react";
+import { Box, ExternalLink, Info, icons } from "lucide-react";
 import { ThumbnailPlaceholder } from "../../../components/ui/thumbnail-placeholder";
-import { AppManifest } from "../../../lib/apps";
 import { useApps } from "../../../lib/hooks/useApps";
 
 export default function AppsHubPage() {
@@ -17,7 +16,7 @@ export default function AppsHubPage() {
     <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 select-none">
       <div className="flex items-center gap-3 mb-8" id="apps-hub-header">
         <div className="p-2 bg-primary/10 rounded-xl border border-primary/20 text-primary">
-          <Icons.Box className="h-6 w-6" />
+          <Box className="h-6 w-6" />
         </div>
         <div>
           <h1 className="font-heading font-bold text-2xl md:text-3xl text-foreground">
@@ -51,8 +50,8 @@ export default function AppsHubPage() {
               </div>
             ) : (
               <div className="h-44 w-full relative overflow-hidden border-b">
-                <ThumbnailPlaceholder 
-                  icon={(Icons as any)[app.icon] || Icons.Box}
+                <ThumbnailPlaceholder
+                  icon={(icons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[app.icon] || Box}
                   iconUrl={app.iconUrl}
                   appName={app.name}
                   bannerBg={app.bannerBg}
@@ -81,10 +80,16 @@ export default function AppsHubPage() {
 
               <div className="mt-5">
                 <a
-                  href={app.entryPath}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl font-medium text-xs px-4 py-2.5 transition-colors border bg-cyan-500 text-white hover:bg-cyan-600 border-transparent"
+                  href={app.type === 'org_app' ? `/dashboard/app/${app.id}` : app.entryPath}
+                  className={cn(
+                    "w-full flex items-center justify-center gap-2 rounded-xl font-medium text-xs px-4 py-2.5 transition-colors border border-transparent",
+                    app.type === 'org_app'
+                      ? "bg-foreground hover:bg-foreground/90 text-background"
+                      : "bg-cyan-500 text-white hover:bg-cyan-600"
+                  )}
                 >
-                  {t("apps_hub.open", "Open Utility")} <Icons.ExternalLink className="h-3 w-3" />
+                  {app.type === 'org_app' ? t("app_card.action_details", "Details") : t("apps_hub.open", "Open Utility")}
+                  {app.type === 'org_app' ? <Info className="h-3 w-3" /> : <ExternalLink className="h-3 w-3" />}
                 </a>
               </div>
             </div>

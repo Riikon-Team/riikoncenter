@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+// @ts-ignore - moduleResolution issue with pnpm
 import { convertMarkdownToReactNode } from 'simple-customize-markdown-converter/react'
 import { Download } from 'lucide-react'
-// @ts-ignore - moduleResolution issue with pnpm
 
 import * as prettier from 'prettier/standalone'
 import * as htmlPlugin from 'prettier/plugins/html'
@@ -81,6 +81,7 @@ export default function MarkdownConverterPage() {
                 className="text-xs font-semibold text-accent-cyan hover:text-cyan-400 flex items-center gap-1.5 transition-colors"
                 title={t('apps.markdown-converter.download_html', 'Download HTML file')}
               >
+                {/* @ts-ignore - type conflict with next and lucide-react */}
                 <Download className="w-3.5 h-3.5" />
                 {t('apps.markdown-converter.download_btn', 'Download')}
               </button>

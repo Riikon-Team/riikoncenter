@@ -9,9 +9,9 @@ import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
-    PrismaModule, 
+    PrismaModule,
     RedisModule,
-    UsersModule, 
+    UsersModule,
     AuthModule,
     GithubModule,
     ThrottlerModule.forRoot([{
@@ -27,4 +27,4 @@ import { APP_GUARD } from '@nestjs/core';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

@@ -11,58 +11,83 @@ This project uses Turborepo to manage multiple applications and shared packages.
 - `packages/ui`: Shared React components (based on shadcn/ui).
 - `packages/types`: Shared TypeScript definitions and DTOs.
 - `packages/config`: Shared configurations (ESLint, TypeScript, Tailwind).
-- `external/`: External applications integrated as Git Submodules that run within our repository but are not built natively into RiikonCenter.
 
 ## Tech Stack
 
 - **Frontend**: Next.js 14 (App Router), React, Tailwind CSS, Zustand, React Query.
 - **Backend**: NestJS, Prisma, PostgreSQL, Redis.
-- **Tooling**: Turborepo, pnpm, TypeScript, Vite (for external wrappers).
+- **Tooling**: Turborepo, pnpm, TypeScript, Docker.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v18 or newer)
-- pnpm (v9+)
-- PostgreSQL
-- Redis
+- Node.js (v20 or newer)
+- pnpm (v11+)
+- Docker & Docker Compose (for production/isolated deployment)
+- PostgreSQL (or Supabase)
+- Redis (or Upstash)
 
-### Installation
+### Installation (Local Development)
 
-1. Clone the repository and initialize submodules:
+1. **Clone the repository:**
    ```bash
    git clone <repository-url>
    cd riikoncenter
-   git submodule update --init --recursive
    ```
 
-2. Install dependencies:
+2. **Install dependencies:**
    ```bash
    pnpm install
    ```
 
-3. Configure environment variables:
-   Copy `.env.example` to `.env` and update the required values (Database URL, Redis connection, etc.).
+3. **Configure environment variables:**
+   Create a single `.env` file at the root of the project. You must define the following variables:
+   ```env
+   # Core Ports
+   PORT=3305
 
-4. Setup the database:
-   ```bash
-   cd apps/api
-   npx prisma migrate dev
+   # Database Configuration
+   DATABASE_URL="postgresql://user:password@host:5432/postgres?schema=riikoncenter"
+
+   # Redis Configuration
+   REDIS_URL="redis://default:password@host:6379"
+
+   # Security
+   JWT_SECRET="your-jwt-secret"
+
+   # Github Configuration (Authentication via Github App)
+   NEXT_PUBLIC_GITHUB_ORG="Riikon-Team"
+   GITHUB_APP_ID="your-github-app-id"
+   GITHUB_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"
+
+   # Application URLs
+   FRONTEND_URL=http://localhost:3003
+   NEXT_PUBLIC_API_URL=http://localhost:3305/api/v1
    ```
 
-### Development
+4. **Run the development server:**
+   Go back to the root directory and start the entire workspace concurrently:
+   ```bash
+   pnpm dev
+   ```
+   *Note: Prisma Client is automatically generated after `pnpm install` via the postinstall script.*
 
-Run the local development server for the entire workspace:
-```bash
-npm run dev
-```
+   The system will start the following services:
+   - Web Application (Next.js): `http://localhost:3003`
+   - API Server (NestJS): `http://localhost:3305` (or whatever `PORT` you defined)
 
-The system will start the following services:
-- Web Application: `http://localhost:3003`
-- API Server: `http://localhost:8008`
-- External Wrappers: `http://localhost:3304`
+### Docker Deployment
+
+RiikonCenter is fully containerized and configured to run smoothly with Docker Compose using the single root `.env` file. All environment variables, ports, and internal routing (Nginx) are automatically handled.
+
+1. Ensure your `.env` file at the root is fully populated.
+2. Build and start the containers:
+   ```bash
+   docker compose up -d --build
+   ```
+3. The platform will be securely served behind the Nginx gateway on port `80`.
 
 ## Documentation
 
-Detailed architectural decisions, system design, and the external submodule integration strategy (Wrapper Mode) are documented in the [`docs/`](./docs) directory.
+Detailed architectural decisions, coding rules, and system design are documented in the [`docs/`](./docs) directory.

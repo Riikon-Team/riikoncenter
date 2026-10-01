@@ -110,7 +110,7 @@ export async function fetchWeatherFromWttr(city: string, isEn: boolean): Promise
     const hourlyRaw = firstWeather.hourly || [];
     const targetHours = ["900", "1200", "1500", "1800"];
     const forecast = targetHours.map(hourStr => {
-      const matched = hourlyRaw.find((h: any) => h.time === hourStr) || hourlyRaw[0];
+      const matched = hourlyRaw.find((h: { time: string, [key: string]: unknown }) => h.time === hourStr) || hourlyRaw[0];
       const hourTemp = matched ? parseInt(matched.tempC) : temp;
       const hourDesc = matched?.weatherDesc?.[0]?.value || 'Clear';
       // Map to simple key icons like 'sunny', 'cloudy', 'rain'
