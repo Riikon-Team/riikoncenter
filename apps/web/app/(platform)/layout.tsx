@@ -36,15 +36,17 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
     setHeaderVisible
   } = useSidebarStore();
 
+  const isDynamicGame = pathname.startsWith("/games/") && pathname !== "/games";
+  const isDynamicApp = pathname.startsWith("/apps/") && pathname !== "/apps";
   const isFullScreenApp = 
     pathname.startsWith("/apps/zentab") || 
     pathname.startsWith("/games/galaxy-shooter") ||
     pathname.startsWith("/apps/konnns-extension") ||
-    pathname.startsWith("/games/vibe-card-game");
+    isDynamicGame ||
+    isDynamicApp;
   const isKonnnsExtension = pathname === "/apps/konnns-extension";
   const isZenTab = pathname.startsWith("/apps/zentab");
-  const isVibeCardGame = pathname.startsWith("/games/vibe-card-game");
-  const canHideHeader = isZenTab || isKonnnsExtension || isVibeCardGame;
+  const canHideHeader = isZenTab || isKonnnsExtension || isDynamicGame || isDynamicApp;
   const [lang, setLang] = useState("en");
   const [isMounted, setIsMounted] = useState(false);
   const [isToolsMenuOpen, setIsToolsMenuOpen] = useState(false);
@@ -128,7 +130,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
                 <Eye className="w-4 h-4" />
               </button>
 
-              {!isVibeCardGame && (
+              {!isDynamicGame && (
                 <button
                   onClick={() => setIsToolsMenuOpen(!isToolsMenuOpen)}
                   className={cn(
@@ -144,7 +146,7 @@ export default function PlatformLayout({ children }: { children: React.ReactNode
           )}
 
           {/* Floating Konnns Tools Menu */}
-          {isMounted && isToolsMenuOpen && !isVibeCardGame && (
+          {isMounted && isToolsMenuOpen && !isDynamicGame && (
             <div className="absolute bottom-16 left-16 z-[9999] w-[450px] h-[600px] animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-none">
                <iframe 
                   src={`${process.env.NEXT_PUBLIC_KONNNS_EXTENSION_URL || 'http://localhost:3304'}/?page=popup`} 

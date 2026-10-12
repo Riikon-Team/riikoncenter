@@ -7,11 +7,12 @@ import * as Icons from "lucide-react";
 import { ThumbnailPlaceholder } from "../../../components/ui/thumbnail-placeholder";
 import { AppManifest } from "../../../lib/apps";
 import { useApps } from "../../../lib/hooks/useApps";
+import { isAppAllowed } from "../../../lib/app-filters";
 
 export default function GamesHubPage() {
   const { t } = useTranslation("common");
   const { apps, isLoading } = useApps();
-  const availableGames = apps.filter(app => app.category === 'game' && app.type !== 'third-party');
+  const availableGames = apps.filter(app => isAppAllowed(app) && app.category === 'game' && (app.type !== 'third-party' || Boolean(app.iframeUrl)));
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 select-none">

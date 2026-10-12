@@ -1,13 +1,14 @@
 {
   "id": "vibe-card-game",
   "name": "Ú Nồ Card Game",
-  "description": "A modern, full-stack 3D multiplayer card party game.",
+  "description": "A 3D card party game for the browser and for Discord Activities. Play the classic deck or the double-sided Flip deck, against bots or with up to four people in a shared room.",
   "category": "game",
   "type": "org_app",
   "icon": "Gamepad2",
   "version": "1.0.15",
   "author": "Konnn04",
   "entryPath": "/games/vibe-card-game",
+  "iframeUrl": "https://vibe-card-game.vercel.app",
   "bannerBg": "from-red-600 to-orange-500",
   "tags": [
     "3d",

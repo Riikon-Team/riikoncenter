@@ -8,6 +8,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import { useApps } from "../../../../../lib/hooks/useApps";
+import { isIframeDisabled } from "../../../../../lib/app-filters";
 import { 
   ArrowLeft, 
   Box, 
@@ -144,25 +145,35 @@ export default function AppDetailsPage() {
             </div>
           </div>
           
-          <div className="shrink-0 flex flex-col gap-3 w-full md:w-auto mt-4 md:mt-0">
-            {isThirdParty || app.type === "org_app" ? (
+          <div className="shrink-0 flex flex-wrap sm:flex-nowrap items-center gap-3 w-full md:w-auto mt-4 md:mt-0">
+            {(isThirdParty || app.type === "org_app") && app.repoUrl && (
               <a 
-                href={app.repoUrl || "#"}
+                href={app.repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex justify-center items-center gap-2 bg-foreground hover:bg-foreground/90 text-background px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
+                className="w-full sm:w-auto flex justify-center items-center gap-2 bg-muted hover:bg-muted/80 text-foreground border border-border px-5 py-3 rounded-xl font-semibold transition-all shadow-sm"
               >
                 {t("app_details.action_repo")} <ExternalLink className="w-4 h-4" />
               </a>
-            ) : (
+            )}
+
+            {app.iframeUrl && !isIframeDisabled(app.id) ? (
               <Link
                 href={app.entryPath}
                 onClick={() => addRecentApp(app.id)}
-                className="w-full flex justify-center items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg shadow-primary/20"
+                className="w-full sm:w-auto flex justify-center items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-cyan-500/20"
+              >
+                {app.category === 'game' ? t("app_details.action_play_now", "Chơi Ngay") : t("app_details.action_use_now", "Dùng Ngay")}
+              </Link>
+            ) : !isThirdParty && app.type !== "org_app" ? (
+              <Link
+                href={app.entryPath}
+                onClick={() => addRecentApp(app.id)}
+                className="w-full sm:w-auto flex justify-center items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg shadow-primary/20"
               >
                 {t("app_details.action_open")}
               </Link>
-            )}
+            ) : null}
           </div>
         </div>
 

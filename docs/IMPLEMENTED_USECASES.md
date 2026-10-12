@@ -141,3 +141,42 @@ ehype-raw into RiikonCenter manifests.
 * **Implemented Use Cases:** `GitHubDialog.tsx`, `useGameLoop.ts`, `useGameActions.ts`, `weatherFetcher.ts`, `Dockerfile.web`, `Dockerfile.api`, `docker-compose.yml`
 * **Architecture & Clean Code:** Refactored entire codebase to eliminate all `any` types to enforce strict TypeScript safety. Migrated hardcoded environment URLs to generic host variables. Translated and standardized Vietnamese comments to English.
 * **Optimization & UI:** Containerized the full RiikonCenter stack using Docker Compose, creating isolated `Dockerfile` environments for both the Next.js Client and NestJS API to ensure robust cross-platform deployments.
+
+### Phase 25: Dynamic External App Hub (Iframe Integration) - 2026-10-02
+* **Implemented Use Cases:** `githubService.ts`, `apiClient.ts`, `games/[id]/page.tsx`
+* **Architecture & Clean Code:** Refactored external application handling by replacing hardcoded submodules (e.g. `vibe-card-game`) with a dynamic Next.js `[id]` route. Integrated the backend GitHub App API to fetch repository `homepage` URLs dynamically, adhering to SOLID principles by centralizing the network logic inside `githubService.ts` via the authenticated `apiClient`. Cleaned up legacy `localStorage` usage in `apiClient`. Enforced strict TypeScript typing (`unknown` error handling with no `any` types) and path alias resolution (`@/services/githubService`).
+* **Optimization & UI:** Achieved 0-RAM static application rendering on the Hub by decoupling external apps entirely. The dynamic UI includes a native cold-start/loading state and full-screen sandbox iframe, providing a seamless "Built-in" experience without infrastructure bloat. Cleaned up legacy route artifacts to guarantee instantaneous Next.js App Router dynamic route compilation.
+
+### Phase 26: Conditional Action Buttons (Play / Use Now) for Iframe Repos - 2026-10-11
+* **Implemented Use Cases:** `apps/web/lib/apps.ts`, `apps/web/app/api/apps/route.ts`, `apps/web/app/(platform)/dashboard/page.tsx`, `apps/web/app/(platform)/dashboard/app/[id]/page.tsx`, `apps/web/app/(platform)/games/page.tsx`, `apps/web/app/(platform)/apps/page.tsx`, `apps/web/locales/vi/common.json`, `apps/web/locales/en/common.json`
+* **Architecture & Clean Code:** Extended `AppManifest` schema with an optional `iframeUrl` property. Enhanced `/api/apps` route to map repository `homepage` / manifest configurations directly to `iframeUrl` and dynamic entry paths (`/games/[id]` or `/apps/[id]`). Updated dashboard cards and app detail profiles to conditionally render "Play Now" / "Use Now" action buttons strictly when an active iframe deployment URL is available. Preserved repository links without layout disruption.
+* **Optimization & UI:** Filtered games and apps hubs dynamically so that third-party repositories with active iframe deployments seamlessly appear in their respective hubs. Cleaned up redundant secondary Details button on cards that already render Details as the primary action. Supported dual-language localization (EN/VI) with no hardcoded UI strings. Maintained strict TypeScript safety without `any`.
+
+### Phase 27: Dynamic External Utility Apps Hub (`/apps/[id]`) & Tools Support - 2026-10-12
+* **Implemented Use Cases:** `apps/web/app/(platform)/apps/[id]/page.tsx`, `apps/web/app/(platform)/layout.tsx`
+* **Architecture & Clean Code:** Created the dynamic external utility app viewer route `apps/web/app/(platform)/apps/[id]/page.tsx` mirroring the `games/[id]` architecture. It dynamically resolves repository metadata via `githubService.getOrgRepos(org)` and embeds external tools/apps (like `Riikon-Team/tools`) via responsive sandboxed iframes without modifying submodules. Applied dependency fallbacks to `FALLBACK_BUILTIN_APPS` and `EXTERNAL_MANIFESTS`.
+* **Optimization & UI:** Updated `layout.tsx` to include `isDynamicApp` in fullscreen constraints and header hover-toggle behaviors. Verified clean build with zero TypeScript errors.
+
+### Phase 28: External App Blocklist Filtering & Tools Unification - 2026-10-12
+* **Implemented Use Cases:** `apps/web/lib/app-filters.ts`, `apps/web/app/api/apps/route.ts`, `apps/web/app/(platform)/dashboard/page.tsx`, `apps/web/app/(platform)/apps/page.tsx`, `apps/web/app/(platform)/games/page.tsx`
+* **Architecture & Clean Code:** Extracted URL filtering rules into an isolated, extensible configuration file (`app-filters.ts`) following the Single Responsibility Principle (SRP). Provides `BLOCKED_URL_PATTERNS`, `isUrlBlocked`, and `isAppAllowed` to filter out non-application URLs (e.g. `npmjs.com`, `npmjs.org`). Unified `Konnns Extension Tools` and the GitHub repository `tools` into a single consolidated application entry to eliminate duplicates across the Dashboard, Apps Hub, and Games Hub.
+* **Optimization & UI:** Filtered applications early during both API response generation in `/api/apps` and frontend memoization in the Dashboard and Hub pages, preventing unnecessary rendering and network payload overhead. Strict TypeScript type-safety preserved with zero `any` types.
+
+### Phase 29: Exclude riikon04.github.io & Disable Iframe for Non-UI Repos (register & riko-check) - 2026-10-12
+* **Implemented Use Cases:** `apps/web/lib/app-filters.ts`, `apps/web/app/api/apps/route.ts`, `apps/web/app/(platform)/dashboard/page.tsx`, `apps/web/app/(platform)/dashboard/app/[id]/page.tsx`, `apps/web/app/(platform)/apps/page.tsx`
+* **Architecture & Clean Code:** Added `BLOCKED_APP_NAMES_OR_IDS` and `isNameBlocked` to filter out non-app repositories like `riikon04.github.io` by both repository name and URL. Introduced `NO_IFRAME_APP_IDS` (`register`, `riko-check`) and helper `isIframeDisabled` in `app-filters.ts` to prevent backend and frontend components from assigning `iframeUrl` to backend/service repositories.
+* **Optimization & UI:** For `register` and `riko-check`, the "Use Now" ("Dùng Ngay") action button is suppressed, and they properly show only the repository link and details view without creating non-functional iframe routes. Complete type safety preserved with zero `any` types.
+
+### Phase 30: Exclude vibe-card-game from Third-Party Repositories Listing - 2026-10-12
+* **Implemented Use Cases:** `apps/web/app/api/apps/route.ts`, `apps/web/app/(platform)/dashboard/page.tsx`
+* **Architecture & Clean Code:** Deduplicated `vibe-card-game` by excluding it from third-party repository scanning in `/api/apps` route and memoized `thirdPartyApps` filter on the Dashboard. Prevents duplicate card generation under "Repository của RiikonTeam" since it is already actively managed as an organizational game in `FALLBACK_BUILTIN_APPS` and the Games Hub.
+* **Optimization & UI:** Cleaned up redundant card rendering on the Dashboard, maintaining single source of truth for `vibe-card-game` in the Games section. Preserved strict type safety and SOLID guidelines.
+
+### Phase 31: Dynamic Homepage Iframe for konnns-extension-tools - 2026-10-12
+* **Implemented Use Cases:** `apps/web/app/(platform)/apps/konnns-extension-tools/page.tsx`, `apps/web/app/(platform)/apps/[id]/page.tsx`
+* **Architecture & Clean Code:** Replaced the legacy static `localhost:3000` iframe fallback inside `apps/konnns-extension-tools/page.tsx` with dynamic metadata resolution via `ExternalAppPage`. Dynamically maps `konnns-extension-tools` to the `Riikon-Team/tools` GitHub repository, loading its declared `homepage` URL directly into the responsive sandbox iframe.
+* **Optimization & UI:** Guaranteed consistent runtime iframe behavior across both dynamic `[id]` routes and dedicated folder routes without hardcoded ports. Zero `any` types and strict TypeScript adherence.
+
+
+
+

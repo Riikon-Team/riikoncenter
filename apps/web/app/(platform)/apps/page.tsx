@@ -6,11 +6,12 @@ import { useTranslation } from "react-i18next";
 import { Box, ExternalLink, Info, icons } from "lucide-react";
 import { ThumbnailPlaceholder } from "../../../components/ui/thumbnail-placeholder";
 import { useApps } from "../../../lib/hooks/useApps";
+import { isAppAllowed, isIframeDisabled } from "../../../lib/app-filters";
 
 export default function AppsHubPage() {
   const { t } = useTranslation("common");
   const { apps, isLoading } = useApps();
-  const availableApps = apps.filter(app => app.category !== 'game' && app.type !== 'third-party');
+  const availableApps = apps.filter(app => isAppAllowed(app) && app.category !== 'game' && (app.type !== 'third-party' || (Boolean(app.iframeUrl) && !isIframeDisabled(app.id))));
 
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8 md:py-12 select-none">
@@ -80,16 +81,18 @@ export default function AppsHubPage() {
 
               <div className="mt-5">
                 <a
-                  href={app.type === 'org_app' ? `/dashboard/app/${app.id}` : app.entryPath}
+                  href={(app.type === 'org_app' && !app.iframeUrl) ? `/dashboard/app/${app.id}` : app.entryPath}
                   className={cn(
                     "w-full flex items-center justify-center gap-2 rounded-xl font-medium text-xs px-4 py-2.5 transition-colors border border-transparent",
-                    app.type === 'org_app'
+                    (app.type === 'org_app' && !app.iframeUrl)
                       ? "bg-foreground hover:bg-foreground/90 text-background"
                       : "bg-cyan-500 text-white hover:bg-cyan-600"
                   )}
                 >
-                  {app.type === 'org_app' ? t("app_card.action_details", "Details") : t("apps_hub.open", "Open Utility")}
-                  {app.type === 'org_app' ? <Info className="h-3 w-3" /> : <ExternalLink className="h-3 w-3" />}
+                  {(app.type === 'org_app' && !app.iframeUrl) 
+                    ? t("app_card.action_details", "Details") 
+                    : (app.iframeUrl ? t("app_card.action_use_now", "Use Now") : t("apps_hub.open", "Open Utility"))}
+                  {(app.type === 'org_app' && !app.iframeUrl) ? <Info className="h-3 w-3" /> : <ExternalLink className="h-3 w-3" />}
                 </a>
               </div>
             </div>

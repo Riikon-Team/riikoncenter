@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { AppManifest, FALLBACK_BUILTIN_APPS } from '../../../lib/apps';
 import { EXTERNAL_MANIFESTS } from '../../../lib/external-manifests';
+import { isAppAllowed, isUrlBlocked, isNameBlocked, isIframeDisabled } from '../../../lib/app-filters';
 
 // Type definition for GitHub API Repo response (partial)
 interface GitHubRepo {
@@ -8,6 +9,7 @@ interface GitHubRepo {
   name: string;
   description: string | null;
   html_url: string;
+  homepage: string | null;
   stargazers_count: number;
   default_branch: string;
   topics: string[];
@@ -45,6 +47,12 @@ export async function GET() {
       // Ignore the riikoncenter repo itself if it's in the same org
       if (repo.name.toLowerCase() === 'riikoncenter') return null;
 
+      // Ignore vibe-card-game repo since it is already registered as an org game
+      if (repo.name.toLowerCase() === 'vibe-card-game') return null;
+
+      // Ignore repos that point to blocked URLs (e.g. npmjs) or blocked names
+      if (isNameBlocked(repo.name) || isUrlBlocked(repo.html_url) || isUrlBlocked(repo.homepage)) return null;
+
       try {
         // Fetch manifest via backend
         const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:8008';
@@ -72,12 +80,22 @@ export async function GET() {
               console.warn(`Failed to fetch readme for ${repo.name}`);
             }
 
+            // If repo or manifest has a deployed homepage, record it as iframeUrl (unless disabled)
+            const shouldDisableIframe = isIframeDisabled(repo.name) || isIframeDisabled(manifestData.id);
+            const homepageUrl = shouldDisableIframe ? undefined : (manifestData.homepage || repo.homepage);
+            const category = manifestData.category || 'utility';
+            const dynamicEntryPath = homepageUrl
+              ? (category === 'game' ? `/games/${repo.name}` : `/apps/${repo.name}`)
+              : manifestData.entryPath;
+
             // Ensure it's marked as third-party and has a fallback repoUrl
             return {
               ...manifestData,
               type: 'third-party',
               repoUrl: manifestData.repoUrl || repo.html_url,
               readme: manifestData.readme || readme,
+              iframeUrl: homepageUrl || undefined,
+              entryPath: dynamicEntryPath || manifestData.entryPath || repo.html_url,
             } as AppManifest;
           }
         }
@@ -101,17 +119,24 @@ export async function GET() {
 
       // Fallback: If no remote manifest exists, check local config first
       const localConfig = EXTERNAL_MANIFESTS[repo.name] || {};
+      const shouldDisableFallbackIframe = isIframeDisabled(repo.name) || isIframeDisabled(localConfig.id);
+      const fallbackHomepage = shouldDisableFallbackIframe ? undefined : (localConfig.iframeUrl || repo.homepage);
+      const fallbackCategory = localConfig.category || 'utility';
+      const fallbackEntryPath = fallbackHomepage
+        ? (fallbackCategory === 'game' ? `/games/${repo.name}` : `/apps/${repo.name}`)
+        : (localConfig.entryPath || repo.html_url);
 
       return {
         id: localConfig.id || repo.name,
         name: localConfig.name || repo.name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
         description: localConfig.description || repo.description || 'No description provided.',
-        category: localConfig.category || 'utility',
+        category: fallbackCategory,
         type: 'third-party',
         icon: localConfig.icon || 'Box',
         version: localConfig.version || '1.0.0',
         author: localConfig.author || orgName,
-        entryPath: localConfig.entryPath || repo.html_url, // For fallback apps, clicking "Open" will just go to the GitHub Repo
+        entryPath: fallbackEntryPath,
+        iframeUrl: fallbackHomepage || undefined,
         tags: localConfig.tags || repo.topics || [],
         repoUrl: localConfig.repoUrl || repo.html_url,
         readme: localConfig.readme || readme,
@@ -124,17 +149,34 @@ export async function GET() {
 
     const results = await Promise.all(repoPromises);
     
-    // Filter out nulls
+    // Filter out nulls and blocked URL patterns (e.g. npmjs)
     results.forEach(app => {
-      if (app) thirdPartyApps.push(app);
+      if (app && isAppAllowed(app)) {
+        // If repo is 'tools', it merges with builtin 'konnns-extension-tools'
+        if (app.id === 'tools' || app.name.toLowerCase() === 'tools') {
+          // If the repo has a homepage, we can enhance konnns-extension-tools
+          const existingTools = FALLBACK_BUILTIN_APPS.find(b => b.id === 'konnns-extension-tools');
+          if (existingTools && app.iframeUrl) {
+            existingTools.iframeUrl = app.iframeUrl;
+          }
+          return; // Do not add duplicate 'tools' card
+        }
+
+        // Skip vibe-card-game or any app already defined in FALLBACK_BUILTIN_APPS
+        if (app.id === 'vibe-card-game' || FALLBACK_BUILTIN_APPS.some(b => b.id === app.id)) {
+          return;
+        }
+
+        thirdPartyApps.push(app);
+      }
     });
 
-    // Combine built-in apps with third-party apps
-    const allApps = [...FALLBACK_BUILTIN_APPS, ...thirdPartyApps];
+    // Combine built-in apps with third-party apps, filtering out any blocked apps
+    const allApps = [...FALLBACK_BUILTIN_APPS, ...thirdPartyApps].filter(isAppAllowed);
 
     return NextResponse.json({ apps: allApps });
   } catch (error) {
     console.error('API /apps error:', error);
-    return NextResponse.json({ apps: FALLBACK_BUILTIN_APPS });
+    return NextResponse.json({ apps: FALLBACK_BUILTIN_APPS.filter(isAppAllowed) });
   }
 }

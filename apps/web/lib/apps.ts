@@ -18,6 +18,7 @@ export type AppManifest = {
   forks?: number;
   status?: 'active' | 'deploying' | 'maintenance';
   readme?: string;
+  iframeUrl?: string;
 }
 import zenTabManifest from '../app/(platform)/apps/zentab/riikoncenter-manifest.json';
 import galaxyShooterManifest from '../app/(platform)/games/galaxy-shooter/riikoncenter-manifest.json';

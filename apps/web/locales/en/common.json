@@ -70,7 +70,9 @@
     "badge_builtin": "System App",
     "action_details": "Details",
     "action_repo": "Repository",
-    "action_open": "Launch App"
+    "action_open": "Launch App",
+    "action_play_now": "Play Now",
+    "action_use_now": "Use Now"
   },
   "app_details": {
     "not_found_title": "Application not found!",
@@ -82,6 +84,8 @@
     "version": "Version v{{version}}",
     "action_repo": "View Organization Repository",
     "action_open": "Launch App Now",
+    "action_play_now": "Play Now",
+    "action_use_now": "Use Now",
     "section_desc": "Application Description",
     "section_tags": "Tags",
     "section_tech": "Technical Specs & Config",

@@ -70,7 +70,9 @@
     "badge_builtin": "System App",
     "action_details": "Chi tiết",
     "action_repo": "Repository",
-    "action_open": "Mở Ứng Dụng"
+    "action_open": "Mở Ứng Dụng",
+    "action_play_now": "Chơi Ngay",
+    "action_use_now": "Dùng Ngay"
   },
   "app_details": {
     "not_found_title": "Không tìm thấy ứng dụng!",
@@ -82,6 +84,8 @@
     "version": "Phiên bản v{{version}}",
     "action_repo": "Xem Organization Repository",
     "action_open": "Mở Ứng Dụng Ngay",
+    "action_play_now": "Chơi Ngay",
+    "action_use_now": "Dùng Ngay",
     "section_desc": "Mô tả ứng dụng",
     "section_tags": "Thẻ từ khóa (Tags)",
     "section_tech": "Thông tin kỹ thuật & Cấu hình",

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { AppManifest } from "../../../lib/apps";
 import { useApps } from "../../../lib/hooks/useApps";
+import { isAppAllowed, isIframeDisabled } from "../../../lib/app-filters";
 import {
   Clock,
   GraduationCap,
@@ -42,9 +43,10 @@ export default function RiikonHubDashboardPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const { apps: allApps, isLoading } = useApps();
 
-  const builtinApps = useMemo(() => allApps.filter((a) => a.type === "builtin"), [allApps]);
-  const orgApps = useMemo(() => allApps.filter((a) => a.type === "org_app"), [allApps]);
-  const thirdPartyApps = useMemo(() => allApps.filter((a) => a.type === "third-party"), [allApps]);
+  const allowedApps = useMemo(() => allApps.filter(isAppAllowed), [allApps]);
+  const builtinApps = useMemo(() => allowedApps.filter((a) => a.type === "builtin"), [allowedApps]);
+  const orgApps = useMemo(() => allowedApps.filter((a) => a.type === "org_app"), [allowedApps]);
+  const thirdPartyApps = useMemo(() => allowedApps.filter((a) => a.type === "third-party" && a.id !== "vibe-card-game"), [allowedApps]);
 
   const filterApp = (app: AppManifest) => {
     const matchesCategory = activeCategory === "all" || app.category === activeCategory;
@@ -265,6 +267,7 @@ function AppCard({ app }: { app: AppManifest }) {
   };
 
   const isThirdParty = app.type === "third-party";
+  const hasIframe = Boolean(app.iframeUrl) && !isIframeDisabled(app.id);
   const appName = t(`apps.${app.id}.name`, app.name);
   const appDesc = t(`apps.${app.id}.description`, app.description);
 
@@ -384,8 +387,9 @@ function AppCard({ app }: { app: AppManifest }) {
         )}
 
         {/* Card Actions */}
-        <div className={cn("pt-4 border-t border-border flex items-center gap-3 mt-auto", app.type === 'org_app' ? "justify-end" : "justify-between")}>
-          {app.type !== 'org_app' && (
+        <div className={cn("pt-4 border-t border-border flex items-center gap-3 mt-auto", (app.type === 'org_app' && !hasIframe) ? "justify-end" : "justify-between")}>
+          {/* Only show left Details button if the right button is NOT already Details */}
+          {(app.type !== 'org_app' || hasIframe) && (
             <Link
               href={`/dashboard/app/${app.id}`}
               className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-lg hover:bg-muted"
@@ -393,31 +397,44 @@ function AppCard({ app }: { app: AppManifest }) {
               <Info className="w-3.5 h-3.5" /> {t("app_card.action_details", "Details")}
             </Link>
           )}
-          {isThirdParty ? (
-            <a
-              href={app.repoUrl || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-4 py-2 transition-all rounded-xl"
-            >
-              {t("app_card.action_repo", "Repo")} <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          ) : app.type === "org_app" ? (
-            <Link
-              href={`/dashboard/app/${app.id}`}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:px-6"
-            >
-              {t("app_card.action_details", "Details")} <Info className="w-3.5 h-3.5" />
-            </Link>
-          ) : (
-            <Link
-              href={app.entryPath}
-              onClick={() => addRecentApp(app.id)}
-              className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:pl-6 group-hover:pr-4"
-            >
-              {t("app_card.action_open", "Open")} <ChevronRight className="w-3.5 h-3.5" />
-            </Link>
-          )}
+
+          <div className="flex items-center gap-2">
+            {isThirdParty && !hasIframe && (
+              <a
+                href={app.repoUrl || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-4 py-2 transition-all rounded-xl"
+              >
+                {t("app_card.action_repo", "Repo")} <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            )}
+
+            {hasIframe ? (
+              <Link
+                href={app.entryPath}
+                onClick={() => addRecentApp(app.id)}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:pl-6 group-hover:pr-4"
+              >
+                {app.category === 'game' ? t("app_card.action_play_now", "Play Now") : t("app_card.action_use_now", "Use Now")} <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            ) : app.type === "org_app" ? (
+              <Link
+                href={`/dashboard/app/${app.id}`}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-foreground hover:bg-foreground/90 text-background px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:px-6"
+              >
+                {t("app_card.action_details", "Details")} <Info className="w-3.5 h-3.5" />
+              </Link>
+            ) : !isThirdParty ? (
+              <Link
+                href={app.entryPath}
+                onClick={() => addRecentApp(app.id)}
+                className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-normal bg-gradient-to-r from-cyan-500 to-blue-600 hover:opacity-90 text-white px-5 py-2.5 transition-all rounded-xl shadow-sm group-hover:pl-6 group-hover:pr-4"
+              >
+                {t("app_card.action_open", "Open")} <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            ) : null}
+          </div>
         </div>
       </div>
 
